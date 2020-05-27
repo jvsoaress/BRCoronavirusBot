@@ -1,7 +1,7 @@
 import telebot
 from configparser import ConfigParser
 from telebot import types as t
-import dados
+import dadosapi
 
 config = ConfigParser()
 config.read('bot.conf')
@@ -21,9 +21,11 @@ def send_welcome(msg):
 
 
 @bot.message_handler(func=lambda m: m.text == 'Dados recentes')
-def send_recent_data(msg):
-    data = dados.send_recent_data()
-    bot.send_message(chat_id=msg.chat.id, text=data, reply_markup=botoes)
+def send_recent_cases(msg):
+    titulo = '\U0001F7E1 <b>Dados recentes de Covid-19 no Brasil</b>\n\n'
+    cases = dadosapi.brazil_recent_cases()
+    texto = titulo + cases
+    bot.send_message(chat_id=msg.chat.id, text=texto, reply_markup=botoes, parse_mode='HTML')
 
 
 bot.polling(timeout=20, none_stop=True)

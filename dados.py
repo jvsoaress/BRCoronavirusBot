@@ -13,4 +13,5 @@ def send_recent_data():
            f'Taxa de mortalidade: {dados["death_rate"]}'
 
 
-send_recent_data()
+if __name__ == '__main__':
+    print(send_recent_data())
