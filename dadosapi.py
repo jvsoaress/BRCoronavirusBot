@@ -1,5 +1,5 @@
 import requests
-from datetime import date, datetime
+from datetime import date
 
 
 def format_day(dia):
