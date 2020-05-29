@@ -3,6 +3,7 @@ from configparser import ConfigParser
 from telebot import types as t
 import dadosapi
 import database
+from time import sleep
 
 config = ConfigParser()
 config.read('bot.conf')
@@ -44,4 +45,8 @@ def send_recent_cases(msg):
     bot.send_message(chat_id=msg.chat.id, text=texto, reply_markup=botoes, parse_mode='HTML')
 
 
-bot.polling(timeout=20, none_stop=True)
+try:
+    bot.polling(timeout=20, none_stop=True)
+except Exception:
+    print('Telegram API connection error. Waiting 15 seconds')
+    sleep(15)
