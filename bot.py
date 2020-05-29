@@ -38,7 +38,7 @@ def register(msg):
 
 @bot.message_handler(func=lambda m: m.text == 'Dados recentes')
 def send_recent_cases(msg):
-    titulo = '\U0001F7E1 <b>Dados recentes de Covid-19 no Brasil</b>\n\n'
+    titulo = '\U0001F6A8 <b>Dados recentes de Covid-19 no Brasil</b>\n\n'
     cases = dadosapi.brazil_recent_cases()
     texto = titulo + cases
     bot.send_message(chat_id=msg.chat.id, text=texto, reply_markup=botoes, parse_mode='HTML')
