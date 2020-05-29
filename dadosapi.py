@@ -1,11 +1,14 @@
 import requests
-from datetime import date
+from datetime import date, datetime, timedelta
 
 
-def format_day(dia):
-    dia = dia.split('-')
-    mes, dia = dia[1], dia[2]
-    return f'{dia}/{mes}'
+def time_format(data):
+    brazil_tz = timedelta(hours=3)
+    data = data.split('.')[0]
+    format_data = datetime.strptime(data, '%Y-%m-%dT%H:%M:%S')
+    format_data = format_data - brazil_tz
+
+    return format_data
 
 
 # lista casos no Brasil em data específica
@@ -19,18 +22,15 @@ def brazil_recent_cases(to_string=True):
         dados = dados['data']
         if to_string:
             data = dados['updated_at']
-            data = data.split('T')
-            dia = data[0]
-            dia = format_day(dia)
-            hora = data[1].split('.')[0]
-
+            data = time_format(data)
             msg = f'\U00002705 <b>Casos confirmados:</b> {dados["confirmed"]}\n' \
                   f'\U00002620 <b>Mortes:</b> {dados["deaths"]}\n' \
                   f'\U0001F504 <b>Recuperados:</b> {dados["recovered"]}\n' \
-                  f'<em>Atualizado em {dia} às {hora}</em>'
+                  f'<em>Atualizado em {data.day}/{data.month:0>2} às {data.time()}</em>'
             return msg
         return dados
-    return None
+    else:
+        return None
 
 
 # lista casos por todos os estados brasileiros
@@ -68,4 +68,3 @@ def all_countries_cases():
 
 if __name__ == '__main__':
     print(brazil_recent_cases())
-
