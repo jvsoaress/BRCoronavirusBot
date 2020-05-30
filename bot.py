@@ -12,9 +12,13 @@ TOKEN = config['BRCORONAVIRUSBOT']['TEST_TOKEN']
 
 bot = telebot.TeleBot(TOKEN)
 
-botoes = t.ReplyKeyboardMarkup()
+botoes = t.ReplyKeyboardMarkup(row_width=1)
 botao1 = t.KeyboardButton('Dados recentes')
-botoes.add(botao1)
+botao2 = t.KeyboardButton('Dados por estado')
+botoes.add(botao1, botao2)
+
+estados = t.InlineKeyboardMarkup()
+sp = t.KeyboardButton('SP')
 
 
 @bot.message_handler(commands=['start', 'help'])
@@ -38,11 +42,20 @@ def register(msg):
 
 
 @bot.message_handler(func=lambda m: m.text == 'Dados recentes')
-def send_recent_cases(msg):
+def send_brazil_recent_cases(msg):
     titulo = '\U0001F6A8 <b>Dados recentes de Covid-19 no Brasil</b>\n\n'
     cases = dadosapi.brazil_recent_cases()
     texto = titulo + cases
     bot.send_message(chat_id=msg.chat.id, text=texto, reply_markup=botoes, parse_mode='HTML')
+
+
+@bot.message_handler(func=lambda m: m.text == 'Por estado')
+def send_state_options(msg):
+    bot.send_message(chat_id=msg.chat.id,
+                     text='<b>Clique no estado desejado</b>\n\n'
+                          '<em>Caso não saiba a sigla de um estado, clique em MOSTRAR SIGLAS</em>',
+                     parse_mode='HTML',
+                     reply_markup=estados)
 
 
 try:
