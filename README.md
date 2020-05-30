@@ -18,8 +18,9 @@ Now install all the required Python packages by typing
 
 <code>pip install -r requirements.txt</code>
 
-Insert your bot TOKEN on <b>sample.conf</b> and rename it to <b>bot.conf</b>.
+Insert your bot TOKEN on <code>sample.conf</code> and rename it to <code>bot.conf</code>.
 
+Create a file <code>users.csv</code> with headers <code>chatid,userid</code> to receive data when someone registers.
 ##Run
 
 To start receiving messages just type
