@@ -48,5 +48,5 @@ def send_recent_cases(msg):
 try:
     bot.polling(timeout=20, none_stop=True)
 except Exception:
-    print('Telegram API connection error. Waiting 15 seconds')
-    sleep(15)
+    print('Telegram API connection error. Waiting 30 seconds.')
+    sleep(30)
