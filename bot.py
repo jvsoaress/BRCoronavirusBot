@@ -22,7 +22,7 @@ def send_welcome(msg):
     bot.send_message(chat_id=msg.chat.id,
                      text='Aperte o botão <b>Dados recentes</b> para obter o balanço mais recente'
                           ' de Coronavírus no Brasil.\n\n'
-                          'Clique em /cadastrar para receber notificações dos dados atualizados por dia.',
+                          'Para receber notificações diárias, clique em /cadastrar',
                      reply_markup=botoes,
                      parse_mode='HTML')
 
