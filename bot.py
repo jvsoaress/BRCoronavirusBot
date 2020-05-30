@@ -18,14 +18,44 @@ botao2 = t.KeyboardButton('Dados por estado')
 botoes.add(botao1, botao2)
 
 estados = t.InlineKeyboardMarkup()
-sp = t.KeyboardButton('SP')
+AC = t.InlineKeyboardButton('AC')
+AL = t.InlineKeyboardButton('AL')
+AP = t.InlineKeyboardButton('AP')
+AM = t.InlineKeyboardButton('AM')
+BA = t.InlineKeyboardButton('BA')
+CE = t.InlineKeyboardButton('CE')
+DF = t.InlineKeyboardButton('DF')
+ES = t.InlineKeyboardButton('ES')
+GO = t.InlineKeyboardButton('GO')
+MA = t.InlineKeyboardButton('MA')
+MT = t.InlineKeyboardButton('MT')
+MS = t.InlineKeyboardButton('MS')
+MG = t.InlineKeyboardButton('MG')
+PA = t.InlineKeyboardButton('PA')
+PB = t.InlineKeyboardButton('PB')
+PR = t.InlineKeyboardButton('PR')
+PE = t.InlineKeyboardButton('PE')
+PI = t.InlineKeyboardButton('PI')
+RJ = t.InlineKeyboardButton('RJ')
+RN = t.InlineKeyboardButton('RN')
+RS = t.InlineKeyboardButton('RS')
+RO = t.InlineKeyboardButton('RO')
+RR = t.InlineKeyboardButton('RR')
+SC = t.InlineKeyboardButton('SC')
+SP = t.InlineKeyboardButton('SP')
+SE = t.InlineKeyboardButton('SE')
+TO = t.InlineKeyboardButton('TO')
+estados.row(AC, AL, AP)
+estados.row(AM, BA, CE)
+estados.row(DF, ES, GO)
+estados.row(MA, MT, MS)
 
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(msg):
     bot.send_message(chat_id=msg.chat.id,
                      text='Aperte o botão <b>Dados recentes</b> para obter o balanço mais recente'
-                          ' de Coronavírus no Brasil.\n\n'
+                          ' de Coronavírus no Brasil\n\n'
                           'Para receber notificações diárias, clique em /cadastrar',
                      reply_markup=botoes,
                      parse_mode='HTML')
