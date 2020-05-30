@@ -7,7 +7,7 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('bot.conf')
 
-    TOKEN = config['BRCORONAVIRUSBOT']['TEST_TOKEN']
+    TOKEN = config['BRCORONAVIRUSBOT']['TOKEN']
 
     bot = telebot.TeleBot(TOKEN)
 
