@@ -3,7 +3,6 @@ from configparser import ConfigParser
 from telebot import types as t
 import dadosapi
 import database
-from time import sleep
 
 config = ConfigParser()
 config.read('bot.conf')
@@ -18,37 +17,39 @@ botao2 = t.KeyboardButton('Dados por estado')
 botoes.add(botao1, botao2)
 
 estados = t.InlineKeyboardMarkup()
-AC = t.InlineKeyboardButton('AC')
-AL = t.InlineKeyboardButton('AL')
-AP = t.InlineKeyboardButton('AP')
-AM = t.InlineKeyboardButton('AM')
-BA = t.InlineKeyboardButton('BA')
-CE = t.InlineKeyboardButton('CE')
-DF = t.InlineKeyboardButton('DF')
-ES = t.InlineKeyboardButton('ES')
-GO = t.InlineKeyboardButton('GO')
-MA = t.InlineKeyboardButton('MA')
-MT = t.InlineKeyboardButton('MT')
-MS = t.InlineKeyboardButton('MS')
-MG = t.InlineKeyboardButton('MG')
-PA = t.InlineKeyboardButton('PA')
-PB = t.InlineKeyboardButton('PB')
-PR = t.InlineKeyboardButton('PR')
-PE = t.InlineKeyboardButton('PE')
-PI = t.InlineKeyboardButton('PI')
-RJ = t.InlineKeyboardButton('RJ')
-RN = t.InlineKeyboardButton('RN')
-RS = t.InlineKeyboardButton('RS')
-RO = t.InlineKeyboardButton('RO')
-RR = t.InlineKeyboardButton('RR')
-SC = t.InlineKeyboardButton('SC')
-SP = t.InlineKeyboardButton('SP')
-SE = t.InlineKeyboardButton('SE')
-TO = t.InlineKeyboardButton('TO')
-estados.row(AC, AL, AP)
-estados.row(AM, BA, CE)
-estados.row(DF, ES, GO)
-estados.row(MA, MT, MS)
+AC = t.InlineKeyboardButton('AC', callback_data='AC')
+AL = t.InlineKeyboardButton('AL', callback_data='AL')
+AP = t.InlineKeyboardButton('AP', callback_data='AP')
+AM = t.InlineKeyboardButton('AM', callback_data='AM')
+BA = t.InlineKeyboardButton('BA', callback_data='BA')
+CE = t.InlineKeyboardButton('CE', callback_data='CE')
+DF = t.InlineKeyboardButton('DF', callback_data='DF')
+ES = t.InlineKeyboardButton('ES', callback_data='ES')
+GO = t.InlineKeyboardButton('GO', callback_data='GO')
+MA = t.InlineKeyboardButton('MA', callback_data='MA')
+MT = t.InlineKeyboardButton('MT', callback_data='MT')
+MS = t.InlineKeyboardButton('MS', callback_data='MS')
+MG = t.InlineKeyboardButton('MG', callback_data='MG')
+PA = t.InlineKeyboardButton('PA', callback_data='PA')
+PB = t.InlineKeyboardButton('PB', callback_data='PB')
+PR = t.InlineKeyboardButton('PR', callback_data='PR')
+PE = t.InlineKeyboardButton('PE', callback_data='PE')
+PI = t.InlineKeyboardButton('PI', callback_data='PI')
+RJ = t.InlineKeyboardButton('RJ', callback_data='RJ')
+RN = t.InlineKeyboardButton('RN', callback_data='RN')
+RS = t.InlineKeyboardButton('RS', callback_data='RS')
+RO = t.InlineKeyboardButton('RO', callback_data='RO')
+RR = t.InlineKeyboardButton('RR', callback_data='RR')
+SC = t.InlineKeyboardButton('SC', callback_data='SC')
+SP = t.InlineKeyboardButton('SP', callback_data='SP')
+SE = t.InlineKeyboardButton('SE', callback_data='SE')
+TO = t.InlineKeyboardButton('TO', callback_data='TO')
+estados.row(AC, AL, AP, AM, BA)
+estados.row(CE, DF, ES, GO, MA)
+estados.row(MT, MS, MG, PA, PB)
+estados.row(PR, PE, PI, RJ, RN)
+estados.row(RS, RO, RR, SC, SP)
+estados.row(SE, TO)
 
 
 @bot.message_handler(commands=['start', 'help'])
@@ -79,7 +80,7 @@ def send_brazil_recent_cases(msg):
     bot.send_message(chat_id=msg.chat.id, text=texto, reply_markup=botoes, parse_mode='HTML')
 
 
-@bot.message_handler(func=lambda m: m.text == 'Por estado')
+@bot.message_handler(func=lambda m: m.text == 'Dados por estado')
 def send_state_options(msg):
     bot.send_message(chat_id=msg.chat.id,
                      text='<b>Clique no estado desejado</b>\n\n'
@@ -88,8 +89,13 @@ def send_state_options(msg):
                      reply_markup=estados)
 
 
-try:
-    bot.polling(timeout=20, none_stop=True)
-except Exception:
-    print('Telegram API connection error. Waiting 30 seconds.')
-    sleep(30)
+@bot.callback_query_handler(func=lambda call: True)
+def send_state_recent_cases(call):
+    texto = dadosapi.state_recent_cases(call.data)
+    bot.edit_message_text(chat_id=call.message.chat.id,
+                          message_id=call.message.message_id,
+                          text=texto,
+                          parse_mode='HTML')
+
+
+bot.polling(timeout=20, none_stop=True)

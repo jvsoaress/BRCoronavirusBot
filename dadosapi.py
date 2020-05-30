@@ -34,12 +34,22 @@ def brazil_recent_cases(to_string=True):
 
 
 # lista casos por estado brasileiro
-def state_cases(uf):
+def state_recent_cases(uf, to_string=True):
     uf = uf.lower()
     r = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/brazil/uf/' + uf)
     if r.ok:
         dados = r.json()
-        print(dados)
+        if to_string:
+            data = dados['datetime']
+            data = time_format(data)
+            msg = f'\U0001F6A8 <b>Dados recentes de Covid-19 | {dados["state"]} ({dados["uf"]})</b>\n\n' \
+                  f'\U00002705 <b>Casos confirmados:</b> {dados["cases"]}\n' \
+                  f'\U00002620 <b>Mortes:</b> {dados["deaths"]}\n' \
+                  f'<em>Atualizado em {data.day}/{data.month:0>2} às {data.time()}</em>'
+            return msg
+        return dados
+
+    return None
 
 
 # lista casos por todos os estados brasileiros
@@ -76,4 +86,4 @@ def all_countries_cases():
 
 
 if __name__ == '__main__':
-    print(state_cases('MG'))
+    print(state_recent_cases('SP'))
