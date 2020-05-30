@@ -83,8 +83,7 @@ def send_brazil_recent_cases(msg):
 @bot.message_handler(func=lambda m: m.text == 'Dados por estado')
 def send_state_options(msg):
     bot.send_message(chat_id=msg.chat.id,
-                     text='<b>Clique no estado desejado</b>\n\n'
-                          '<em>Caso não saiba a sigla de um estado, clique em MOSTRAR SIGLAS</em>',
+                     text='<b>Clique no estado desejado</b>\n\n',
                      parse_mode='HTML',
                      reply_markup=estados)
 
