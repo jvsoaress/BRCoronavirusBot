@@ -98,4 +98,4 @@ def send_state_recent_cases(call):
                           parse_mode='HTML')
 
 
-bot.polling(timeout=20, none_stop=True)
+bot.polling(timeout=60, none_stop=True)
