@@ -22,7 +22,7 @@ Insert your bot TOKEN on <b>sample.conf</b> and rename it to <b>bot.conf</b>.
 
 ## Run
 
-First configure your bot. Check [Telegram's API](https://core.telegram.org/bots/api) documentation, section **Authorizing your bot.** You can use [BotFather](https://core.telegram.org/bots#6-botfather) to create your bot's token, which should be add into [bot.conf](https://github.com/bessavagner/BRCoronavirusBot/edit/master/bot.conf).
+First configure your bot. Check [Telegram's API](https://core.telegram.org/bots/api) documentation, section **Authorizing your bot.** You can use [BotFather](https://core.telegram.org/bots#6-botfather) to create your bot's token, which should be add into [bot.conf](https://github.com/bessavagner/BRCoronavirusBot/blob/master/sample.conf).
 
 To start receiving messages just type
 
