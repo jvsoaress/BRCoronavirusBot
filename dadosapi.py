@@ -10,6 +10,10 @@ def time_format(data):
 
     return format_data
 
+def date_format(data):
+    data = data.split('-')
+    return f"{data[2]}/{data[1]}/{data[0]}"
+
 
 # lista casos no Brasil em data específica
 def brazil_recent_cases(to_string=True):
@@ -58,6 +62,35 @@ def all_states_cases():
     if r.ok:
         dados = r.json()
         dados = dados['data']
+        return dados
+
+    return None
+
+# lista das cidades:
+def cidadesbr():
+    r = requests.get('https://brasil.io/api/dataset/covid19/caso_full/data/?format=json')
+    if r.ok:
+        return [item['city'] for item in r.json()['results']]
+
+# lista casos por cidade (API: brasil.io)
+def city_recent_cases(city, to_string=True):
+    # uf = uf.lower()
+    r = requests.get('https://brasil.io/api/dataset/covid19/caso_full/data/?format=json')
+    if r.ok:
+        dados = r.json()
+        if to_string:
+            dados = dados["results"]
+            data = []
+            for item in dados:
+                if item['city'] == city:
+                    dados = item
+                    data = item['date']
+                    data = date_format(data)
+            msg = f'\U0001F6A8 <b>Dados recentes de Covid-19 | {dados["state"]} ({dados["city"]})</b>\n\n' \
+                  f'\U00002705 <b>Casos confirmados:</b> {dados["last_available_confirmed"]}\n' \
+                  f'\U00002620 <b>Mortes:</b> {dados["last_available_deaths"]}\n' \
+                  f'<em>{data}</em>'
+            return msg
         return dados
 
     return None

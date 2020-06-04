@@ -2,3 +2,5 @@ bot.conf
 __pycache__
 venv
 users.csv
+covidenv/
+.vscode/
