@@ -5,7 +5,7 @@ import dadosapi
 import database
 
 config = ConfigParser()
-config.read('sample.conf')
+config.read('bot.conf')
 
 TOKEN = config['BRCORONAVIRUSBOT']['TOKEN']
 
