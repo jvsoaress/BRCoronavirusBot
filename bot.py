@@ -11,10 +11,13 @@ TOKEN = config['BRCORONAVIRUSBOT']['TOKEN']
 
 bot = telebot.TeleBot(TOKEN)
 
+cidades = dadosapi.cidadesbr()
+
 botoes = t.ReplyKeyboardMarkup(row_width=1)
 botao1 = t.KeyboardButton('Dados recentes')
 botao2 = t.KeyboardButton('Dados por estado')
-botoes.add(botao1, botao2)
+botao3 = t.KeyboardButton('Dados por cidade')
+botoes.add(botao1, botao2, botao3)
 
 estados = t.InlineKeyboardMarkup(row_width=5)
 AC = t.InlineKeyboardButton('AC', callback_data='AC')
@@ -89,6 +92,20 @@ def send_state_options(msg):
                      parse_mode='HTML',
                      reply_markup=estados)
 
+@bot.message_handler(func=lambda m: m.text == 'Dados por cidade')
+def send_city_options(msg):
+    bot.send_message(chat_id=msg.chat.id,
+                     text='<b>Digite o nome da cidade (primeira letra maiúscula):</b>\n\n',
+                     parse_mode='HTML')
+
+
+@bot.message_handler(func=lambda m: m.text in cidades)
+def send_city_recent_cases(msg):
+    texto = dadosapi.city_recent_cases(msg.text)
+    bot.send_message(chat_id=msg.chat.id,
+                     text=texto,
+                     parse_mode='HTML')
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def send_state_recent_cases(call):
@@ -104,13 +121,15 @@ def send_state_recent_cases(call):
                               message_id=call.message.message_id,
                               text=texto,
                               parse_mode='HTML',
-                              reply_markup=estados)
+                              reply_markup=estados)   
     else:
         texto = dadosapi.state_recent_cases(call.data)
         bot.edit_message_text(chat_id=call.message.chat.id,
-                              message_id=call.message.message_id,
-                              text=texto,
-                              parse_mode='HTML')
+                            message_id=call.message.message_id,
+                            text=texto,
+                            parse_mode='HTML')
+
+
 
 
 bot.polling(timeout=60, none_stop=True)
