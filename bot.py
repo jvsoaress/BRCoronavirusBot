@@ -89,9 +89,9 @@ def send_state_options(msg):
     bot.send_message(chat_id=msg.chat.id,
                      text='<b>Clique no estado desejado</b>\n\n'
                           '<em>Caso não saiba a sigla de um estado, clique em SIGLAS</em>',
-                     text='<b>Clique no estado desejado</b>\n\n',
                      parse_mode='HTML',
                      reply_markup=estados)
+
 
 @bot.message_handler(func=lambda m: m.text == 'Dados por cidade')
 def send_city_options(msg):
@@ -126,11 +126,9 @@ def send_state_recent_cases(call):
     else:
         texto = dadosapi.state_recent_cases(call.data)
         bot.edit_message_text(chat_id=call.message.chat.id,
-                            message_id=call.message.message_id,
-                            text=texto,
-                            parse_mode='HTML')
-
-
+                              message_id=call.message.message_id,
+                              text=texto,
+                              parse_mode='HTML')
 
 
 bot.polling(timeout=60, none_stop=True)
