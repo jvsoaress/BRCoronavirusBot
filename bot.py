@@ -11,12 +11,15 @@ TOKEN = config['BRCORONAVIRUSBOT']['TOKEN']
 
 bot = telebot.TeleBot(TOKEN)
 
+cidades = dadosapi.cidadesbr()
+
 botoes = t.ReplyKeyboardMarkup(row_width=1)
 botao1 = t.KeyboardButton('Dados recentes')
 botao2 = t.KeyboardButton('Dados por estado')
-botoes.add(botao1, botao2)
+botao3 = t.KeyboardButton('Dados por cidade')
+botoes.add(botao1, botao2, botao3)
 
-estados = t.InlineKeyboardMarkup()
+estados = t.InlineKeyboardMarkup(row_width=5)
 AC = t.InlineKeyboardButton('AC', callback_data='AC')
 AL = t.InlineKeyboardButton('AL', callback_data='AL')
 AP = t.InlineKeyboardButton('AP', callback_data='AP')
@@ -44,12 +47,13 @@ SC = t.InlineKeyboardButton('SC', callback_data='SC')
 SP = t.InlineKeyboardButton('SP', callback_data='SP')
 SE = t.InlineKeyboardButton('SE', callback_data='SE')
 TO = t.InlineKeyboardButton('TO', callback_data='TO')
+SIGLAS = t.InlineKeyboardButton('SIGLAS', callback_data='SIGLAS')
 estados.row(AC, AL, AP, AM, BA)
 estados.row(CE, DF, ES, GO, MA)
 estados.row(MT, MS, MG, PA, PB)
 estados.row(PR, PE, PI, RJ, RN)
 estados.row(RS, RO, RR, SC, SP)
-estados.row(SE, TO)
+estados.row(SE, TO, SIGLAS)
 
 
 @bot.message_handler(commands=['start', 'help'])
@@ -83,18 +87,50 @@ def send_brazil_recent_cases(msg):
 @bot.message_handler(func=lambda m: m.text == 'Dados por estado')
 def send_state_options(msg):
     bot.send_message(chat_id=msg.chat.id,
+                     text='<b>Clique no estado desejado</b>\n\n'
+                          '<em>Caso não saiba a sigla de um estado, clique em SIGLAS</em>',
                      text='<b>Clique no estado desejado</b>\n\n',
                      parse_mode='HTML',
                      reply_markup=estados)
 
+@bot.message_handler(func=lambda m: m.text == 'Dados por cidade')
+def send_city_options(msg):
+    bot.send_message(chat_id=msg.chat.id,
+                     text='<b>Digite o nome da cidade (primeira letra maiúscula):</b>\n\n',
+                     parse_mode='HTML')
+
+
+@bot.message_handler(func=lambda m: m.text in cidades)
+def send_city_recent_cases(msg):
+    texto = dadosapi.city_recent_cases(msg.text)
+    bot.send_message(chat_id=msg.chat.id,
+                     text=texto,
+                     parse_mode='HTML')
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def send_state_recent_cases(call):
-    texto = dadosapi.state_recent_cases(call.data)
-    bot.edit_message_text(chat_id=call.message.chat.id,
-                          message_id=call.message.message_id,
-                          text=texto,
-                          parse_mode='HTML')
+    if call.data == 'SIGLAS':
+        texto = '<b>Siglas dos estados brasileiros</b>\n\n' \
+                'Acre - AC\nAlagoas - AL\nAmapá - AP\nAmazonas - AM\nBahia  - BA\n' \
+                'Ceará - CE\nDistrito Federal  - DF\nEspírito Santo - ES\nGoiás - GO\n' \
+                'Maranhão - MA\nMato Grosso - MT\nMato Grosso do Sul - MS\nMinas Gerais - MG\n' \
+                'Pará - PA\nParaíba - PB\nParaná - PR\nPernambuco - PE\nPiauí - PI\nRio de Janeiro - RJ\n' \
+                'Rio Grande do Norte - RN\nRio Grande do Sul - RS\nRondônia - RO\nRoraima - RR\n' \
+                'Santa Catarina - SC\nSão Paulo - SP\nSergipe - SE\nTocantins - TO'
+        bot.edit_message_text(chat_id=call.message.chat.id,
+                              message_id=call.message.message_id,
+                              text=texto,
+                              parse_mode='HTML',
+                              reply_markup=estados)
+    else:
+        texto = dadosapi.state_recent_cases(call.data)
+        bot.edit_message_text(chat_id=call.message.chat.id,
+                            message_id=call.message.message_id,
+                            text=texto,
+                            parse_mode='HTML')
 
 
-bot.polling(timeout=20, none_stop=True)
+
+
+bot.polling(timeout=60, none_stop=True)
