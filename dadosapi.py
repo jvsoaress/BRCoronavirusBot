@@ -11,11 +11,6 @@ def time_format(data):
     return format_data
 
 
-def date_format(data):
-    data = data.split('-')
-    return f"{data[2]}/{data[1]}/{data[0]}"
-
-
 # lista casos no Brasil em data específica
 def brazil_recent_cases(to_string=True):
     hoje = str(date.today())
@@ -31,7 +26,7 @@ def brazil_recent_cases(to_string=True):
             msg = f'\U00002705 <b>Casos confirmados:</b> {dados["confirmed"]}\n' \
                   f'\U00002620 <b>Mortes:</b> {dados["deaths"]}\n' \
                   f'\U0001F504 <b>Recuperados:</b> {dados["recovered"]}\n' \
-                  f'<em>Atualizado em {data.day}/{data.month:0>2} às {data.time()}</em>'
+                  f'<em>Atualizado em {data.day:0>2}/{data.month:0>2} às {data.time()}</em>'
             return msg
         return dados
     else:
@@ -72,27 +67,25 @@ def all_states_cases():
 def cidadesbr():
     r = requests.get('https://servicodados.ibge.gov.br/api/v1/localidades/municipios/?orderBy=nome')
     if r.ok:
-        return (item['nome'] for item in r.json())
+        return (item['nome'].upper() for item in r.json())
 
 
 # lista casos por cidade (API: brasil.io)
 def city_recent_cases(city, to_string=True):
-    # uf = uf.lower()
-    r = requests.get('https://brasil.io/api/dataset/covid19/caso_full/data/?format=json')
+    params = {'city': city, 'is_last': True}
+    r = requests.get('https://brasil.io/api/dataset/covid19/caso_full/data/?format=json', params=params)
     if r.ok:
         dados = r.json()
         if to_string:
-            dados = dados["results"]
-            data = []
-            for item in dados:
-                if item['city'] == city:
-                    dados = item
-                    data = item['date']
-                    data = date_format(data)
+            dados = dados['results'][0]
+            data = dados['date'].split('-')
+            data = f'{data[2]}/{data[1]}'
             msg = f'\U0001F6A8 <b>Dados recentes de Covid-19 | {dados["state"]} ({dados["city"]})</b>\n\n' \
                   f'\U00002705 <b>Casos confirmados:</b> {dados["last_available_confirmed"]}\n' \
                   f'\U00002620 <b>Mortes:</b> {dados["last_available_deaths"]}\n' \
-                  f'<em>{data}</em>'
+                  f'<b>Novos confirmados:</b> {dados["new_confirmed"]}\n' \
+                  f'<b>Novas mortes:</b> {dados["new_deaths"]}\n' \
+                  f'<em>Atualizado em {data}</em>'
             return msg
         return dados
 
@@ -122,4 +115,4 @@ def all_countries_cases():
 
 
 if __name__ == '__main__':
-    print(cidadesbr())
+    print(city_recent_cases('São Paulo'))

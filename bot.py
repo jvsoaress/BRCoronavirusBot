@@ -12,6 +12,7 @@ TOKEN = config['BRCORONAVIRUSBOT']['TOKEN']
 bot = telebot.TeleBot(TOKEN)
 
 cidades = dadosapi.cidadesbr()
+print('Cidades importadas')
 
 botoes = t.ReplyKeyboardMarkup(row_width=1)
 botao1 = t.KeyboardButton('Dados recentes')
@@ -100,9 +101,9 @@ def send_city_options(msg):
                      parse_mode='HTML')
 
 
-@bot.message_handler(func=lambda m: m.text in cidades)
+@bot.message_handler(func=lambda m: m.text.upper() in cidades)
 def send_city_recent_cases(msg):
-    texto = dadosapi.city_recent_cases(msg.text)
+    texto = dadosapi.city_recent_cases(msg.text.strip())
     bot.send_message(chat_id=msg.chat.id,
                      text=texto,
                      parse_mode='HTML')
