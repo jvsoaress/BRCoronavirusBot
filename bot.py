@@ -67,6 +67,7 @@ def send_city_options(msg):
 
 @bot.message_handler(func=lambda m: m.text.upper() in cidades)
 def send_city_recent_cases(msg):
+    print(f'Dados por cidade: {msg.text}')
     texto = dadosapi.city_recent_cases(msg.text.strip())
     bot.send_message(chat_id=msg.chat.id,
                      text=texto,
