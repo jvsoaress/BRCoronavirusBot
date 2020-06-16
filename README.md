@@ -4,6 +4,11 @@ Telegram Bot @BRCoronavirusBot
 ## About
 This is a simple Telegram Bot made to inform about Brazil's Covid-19 spread.
 
+### Sources
+- COVID-19 Brazil API, available at https://covid19-brazil-api.now.sh/
+- Secretarias de Saúde das Unidades Federativas, data by Álvaro Justen and coworkers, available at https://github.com/turicas/covid19-br/blob/master/api.md
+- IBGE locations, available at https://servicodados.ibge.gov.br/api/docs/localidades?versao=1
+
 ## Setup
 First, create your own virtual environment by typing
 
