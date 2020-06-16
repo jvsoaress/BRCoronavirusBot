@@ -10,6 +10,7 @@ def time_format(data):
 
     return format_data
 
+
 def date_format(data):
     data = data.split('-')
     return f"{data[2]}/{data[1]}/{data[0]}"
@@ -66,11 +67,13 @@ def all_states_cases():
 
     return None
 
-# lista das cidades:
+
+# lista das cidades (API: IBGE)
 def cidadesbr():
-    r = requests.get('https://brasil.io/api/dataset/covid19/caso_full/data/?format=json')
+    r = requests.get('https://servicodados.ibge.gov.br/api/v1/localidades/municipios/?orderBy=nome')
     if r.ok:
-        return [item['city'] for item in r.json()['results']]
+        return (item['nome'] for item in r.json())
+
 
 # lista casos por cidade (API: brasil.io)
 def city_recent_cases(city, to_string=True):
@@ -119,4 +122,4 @@ def all_countries_cases():
 
 
 if __name__ == '__main__':
-    print(state_recent_cases('SP'))
+    print(cidadesbr())
