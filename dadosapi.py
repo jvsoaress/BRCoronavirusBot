@@ -91,10 +91,9 @@ def city_recent_cases(city, to_string=True):
             data = f'{data[2]}/{data[1]}'
 
             msg = f'\U0001F6A8 <b>Dados recentes de Covid-19 | {dados["state"]} ({dados["city"]})</b>\n\n' \
-                  f'\U00002705 <b>Casos confirmados:</b> {dados["last_available_confirmed"]}\n' \
-                  f'\U00002620 <b>Mortes:</b> {dados["last_available_deaths"]}\n' \
-                  f'<b>Novos confirmados:</b> {dados["new_confirmed"]}\n' \
-                  f'<b>Novas mortes:</b> {dados["new_deaths"]}\n' \
+                  f'\U00002705 <b>Casos confirmados:</b> {dados["last_available_confirmed"]}' \
+                  f' ({dados["new_confirmed"]} em 24h)\n' \
+                  f'\U00002620 <b>Mortes:</b> {dados["last_available_deaths"]} ({dados["new_deaths"]} em 24h)\n' \
                   f'<em>Atualizado em {data}</em>'
             return msg
         return dados
