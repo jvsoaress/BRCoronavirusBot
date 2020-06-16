@@ -78,8 +78,10 @@ def city_recent_cases(city, to_string=True):
         dados = r.json()
         if to_string:
             dados = dados['results'][0]
+
             data = dados['date'].split('-')
             data = f'{data[2]}/{data[1]}'
+
             msg = f'\U0001F6A8 <b>Dados recentes de Covid-19 | {dados["state"]} ({dados["city"]})</b>\n\n' \
                   f'\U00002705 <b>Casos confirmados:</b> {dados["last_available_confirmed"]}\n' \
                   f'\U00002620 <b>Mortes:</b> {dados["last_available_deaths"]}\n' \
