@@ -11,6 +11,13 @@ def time_format(data):
     return format_data
 
 
+def format_city_name(city):
+    palavras = ('da', 'de', 'do', 'du')
+    for item in palavras:
+        city = city.replace(item.capitalize(), item)
+    return city
+
+
 # lista casos no Brasil em data específica
 def brazil_recent_cases(to_string=True):
     hoje = str(date.today())
@@ -67,11 +74,12 @@ def all_states_cases():
 def cidadesbr():
     r = requests.get('https://servicodados.ibge.gov.br/api/v1/localidades/municipios/?orderBy=nome')
     if r.ok:
-        return (item['nome'].upper() for item in r.json())
+        return [item['nome'].upper() for item in r.json()]
 
 
 # lista casos por cidade (API: brasil.io)
 def city_recent_cases(city, to_string=True):
+    city = format_city_name(city.title())
     params = {'city': city, 'is_last': True}
     r = requests.get('https://brasil.io/api/dataset/covid19/caso_full/data/?format=json', params=params)
     if r.ok:
@@ -117,4 +125,4 @@ def all_countries_cases():
 
 
 if __name__ == '__main__':
-    print(city_recent_cases('São Paulo'))
+    print(city_recent_cases('são caetano do sul'))

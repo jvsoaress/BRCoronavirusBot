@@ -97,7 +97,7 @@ def send_state_options(msg):
 @bot.message_handler(func=lambda m: m.text == 'Dados por cidade')
 def send_city_options(msg):
     bot.send_message(chat_id=msg.chat.id,
-                     text='<b>Digite o nome da cidade:</b>\n\n',
+                     text='Ok! Me envie o nome da cidade (com acentos)\n',
                      parse_mode='HTML')
 
 
