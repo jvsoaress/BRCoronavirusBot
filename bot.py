@@ -3,6 +3,7 @@ from configparser import ConfigParser
 from buttons import *
 import dadosapi
 import database
+import requests
 
 config = ConfigParser()
 config.read('bot.conf')
@@ -36,9 +37,11 @@ def register(msg):
     chatid = msg.chat.id
     userid = msg.from_user.id
     if database.register(chatid, userid):
-        bot.send_message(chat_id=msg.chat.id, text='Usuário cadastrado com sucesso!')
+        bot.send_message(chat_id=msg.chat.id,
+                         text='Usuário cadastrado com sucesso!')
     else:
-        bot.send_message(chat_id=msg.chat.id, text='Usuário já está cadastrado.')
+        bot.send_message(chat_id=msg.chat.id,
+                         text='Usuário já está cadastrado.')
 
 
 @bot.message_handler(func=lambda m: m.text == 'Dados recentes')
@@ -46,7 +49,8 @@ def send_brazil_recent_cases(msg):
     titulo = '\U0001F6A8 <b>Dados recentes de Covid-19 no Brasil</b>\n\n'
     cases = dadosapi.brazil_recent_cases()
     texto = titulo + cases
-    bot.send_message(chat_id=msg.chat.id, text=texto, reply_markup=botoes, parse_mode='HTML')
+    bot.send_message(chat_id=msg.chat.id, text=texto,
+                     reply_markup=botoes, parse_mode='HTML')
 
 
 @bot.message_handler(func=lambda m: m.text == 'Dados por estado')
@@ -95,6 +99,14 @@ def send_state_recent_cases(call):
                               message_id=call.message.message_id,
                               text=texto,
                               parse_mode='HTML')
+
+
+@bot.message_handler(commands=['graficos'])
+def send_graphs(msg):
+    data = {'chat_id': msg.chat.id}
+    file = {'photo': open('images/canvas.jpg', 'rb')}
+    status = requests.post(
+        'https://api.telegram.org/bot1178225049:AAG5o04uRwq7bEZpz2fmQjWH22uO3x7xDu0/sendPhoto', data=data, files=file)
 
 
 bot.polling(timeout=60, none_stop=True)
