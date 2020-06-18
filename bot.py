@@ -49,7 +49,8 @@ def register(msg):
 def send_brazil_recent_cases(msg):
     titulo = '\U0001F6A8 <b>Dados recentes de Covid-19 no Brasil</b>\n\n'
     cases = dadosapi.brazil_recent_cases()
-    texto = titulo + cases
+    footer = '\n<code>Ver gráficos: /graficos</code>'
+    texto = titulo + cases + footer
     bot.send_message(chat_id=msg.chat.id, text=texto,
                      reply_markup=botoes, parse_mode='HTML')
 
@@ -104,6 +105,7 @@ def send_state_recent_cases(call):
 
 @bot.message_handler(commands=['graficos'])
 def send_graphs(msg):
+    print(f'{msg.from_user.first_name} pediu os gráficos')
     caption = {
         'graph1.jpg': 'Casos novos de COVID-19 por data de notificação',
         'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação',
@@ -111,9 +113,10 @@ def send_graphs(msg):
         'graph4.jpg': 'Óbitos acumulados de COVID-19 por data de notificação'
     }
     for filename in os.listdir('images'):
-        bot.send_photo(chat_id=msg.chat.id,
-                       photo=open(f'images/{filename}', 'rb'),
-                       caption=caption[filename])
+        foto = bot.send_photo(chat_id=msg.chat.id,
+                              photo=open(f'images/{filename}', 'rb'),
+                              caption=caption[filename])
+        print(f'Arquivo {filename} enviado')
 
 
 bot.polling(timeout=60, none_stop=True)
