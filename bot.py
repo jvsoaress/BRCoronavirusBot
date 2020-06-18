@@ -16,6 +16,14 @@ bot = telebot.TeleBot(TOKEN)
 botoes = Buttons().botoes
 estados = Estados().estados
 
+all_graphs = dict()
+caption = {
+    'graph1.jpg': 'Casos novos de COVID-19 por data de notificação',
+    'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação',
+    'graph3.jpg': 'Óbitos de COVID-19 por data de notificação',
+    'graph4.jpg': 'Óbitos acumulados de COVID-19 por data de notificação'
+}
+
 try:
     cidades = dadosapi.cidadesbr()
     print('Cidades importadas com sucesso!')
@@ -49,7 +57,7 @@ def register(msg):
 def send_brazil_recent_cases(msg):
     titulo = '\U0001F6A8 <b>Dados recentes de Covid-19 no Brasil</b>\n\n'
     cases = dadosapi.brazil_recent_cases()
-    footer = '\n<code>Ver gráficos: /graficos</code>'
+    footer = '\n\n<b>Ver gráficos:</b> /graficos'
     texto = titulo + cases + footer
     bot.send_message(chat_id=msg.chat.id, text=texto,
                      reply_markup=botoes, parse_mode='HTML')
@@ -106,16 +114,17 @@ def send_state_recent_cases(call):
 @bot.message_handler(commands=['graficos'])
 def send_graphs(msg):
     print(f'{msg.from_user.first_name} pediu os gráficos')
-    caption = {
-        'graph1.jpg': 'Casos novos de COVID-19 por data de notificação',
-        'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação',
-        'graph3.jpg': 'Óbitos de COVID-19 por data de notificação',
-        'graph4.jpg': 'Óbitos acumulados de COVID-19 por data de notificação'
-    }
     for filename in os.listdir('images'):
+        if len(all_graphs) == 4:
+            photo = all_graphs[filename]
+        else:
+            print('Foto não está no servidor. Uploading...')
+            photo = open(f'images/{filename}', 'rb')
+
         foto = bot.send_photo(chat_id=msg.chat.id,
-                              photo=open(f'images/{filename}', 'rb'),
+                              photo=photo,
                               caption=caption[filename])
+        all_graphs[filename] = foto.photo[0].file_id
         print(f'Arquivo {filename} enviado')
 
 
