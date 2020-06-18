@@ -17,8 +17,6 @@ bot = telebot.TeleBot(TOKEN)
 botoes = Buttons().botoes
 estados = Estados().estados
 
-
-
 try:
     cidades = dadosapi.cidadesbr()
     print('Cidades importadas com sucesso!')
