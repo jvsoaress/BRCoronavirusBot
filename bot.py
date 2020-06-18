@@ -106,7 +106,9 @@ def send_state_recent_cases(call):
 def send_graphs(msg):
     caption = {
         'graph1.jpg': 'Casos novos de COVID-19 por data de notificação',
-        'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação'
+        'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação',
+        'graph3.jpg': 'Óbitos de COVID-19 por data de notificação',
+        'graph4.jpg': 'Óbitos acumulados de COVID-19 por data de notificação'
     }
     for filename in os.listdir('images'):
         bot.send_photo(chat_id=msg.chat.id,
