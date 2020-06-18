@@ -106,7 +106,7 @@ def send_state_recent_cases(call):
 
 @bot.message_handler(commands=['graficos'])
 def send_graphs(msg):
-    print(f'{msg.from_user.first_name} pediu os gráficos')
+    print(f'{msg.from_user.id} pediu os gráficos')
     for filename in os.listdir('images'):
         if len(Graph.all_graphs) == 4:
             photo = Graph.all_graphs[filename]
