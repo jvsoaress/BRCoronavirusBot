@@ -4,6 +4,7 @@ from buttons import *
 import dadosapi
 import database
 import requests
+import os
 
 config = ConfigParser()
 config.read('bot.conf')
@@ -104,9 +105,10 @@ def send_state_recent_cases(call):
 @bot.message_handler(commands=['graficos'])
 def send_graphs(msg):
     data = {'chat_id': msg.chat.id}
-    file = {'photo': open('images/canvas.jpg', 'rb')}
-    status = requests.post(
-        'https://api.telegram.org/bot1178225049:AAG5o04uRwq7bEZpz2fmQjWH22uO3x7xDu0/sendPhoto', data=data, files=file)
+    for filename in os.listdir('images'):
+        file = {'photo': open(f'images/{filename}', 'rb')}
+        status = requests.post(
+            'https://api.telegram.org/bot1178225049:AAG5o04uRwq7bEZpz2fmQjWH22uO3x7xDu0/sendPhoto', data=data, files=file)
 
 
 bot.polling(timeout=60, none_stop=True)
