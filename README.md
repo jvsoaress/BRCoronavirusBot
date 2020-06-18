@@ -23,7 +23,10 @@ Now install all the required Python packages by typing
 
 <code>pip install -r requirements.txt</code>
 
-Insert your bot TOKEN on <b>sample.conf</b> and rename it to <b>bot.conf</b>.
+Insert your bot TOKEN on <code>sample.conf</code> and rename it to <code>bot.conf</code>.
+
+*In order for the bot to run properly, I've set up a cronjob to execute <code>graphs.py</code> and <code>routine.py</code>.
+The file <code>graphs.py</code> download graphs from https://covid.saude.gov.br as a JPG file and move them to <code>images</code> folder. The file <code>routine.py</code> sends a notification to users.
 
 ## Run
 
