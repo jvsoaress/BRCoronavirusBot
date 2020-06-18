@@ -15,5 +15,6 @@ if __name__ == '__main__':
     for chatid in chatid_list:
         titulo = '\U0001F6A8 <b>Dados recentes de Covid-19 no Brasil</b>\n\n'
         cases = dadosapi.brazil_recent_cases()
-        texto = titulo + cases
+        footer = '\n\n<b>Ver gráficos:</b> /graficos'
+        texto = titulo + cases + footer
         bot.send_message(chat_id=chatid, text=texto, parse_mode='HTML')
