@@ -2,16 +2,7 @@ import base64
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
-
-class Graph:
-    all_graphs = dict()
-    caption = {
-        'graph1.jpg': 'Casos novos de COVID-19 por data de notificação',
-        'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação',
-        'graph3.jpg': 'Óbitos de COVID-19 por data de notificação',
-        'graph4.jpg': 'Óbitos acumulados de COVID-19 por data de notificação'
-    }
+import json
 
 
 def execute_script(driver, image):
@@ -68,7 +59,20 @@ def download_graphs():
             f.write(img)
     print('Arquivos salvos com sucesso!')
 
+    print('Atualizando arquivo JSON...')
+    update_graphs_json()
+    print('Arquivo JSON atualizado com sucesso!')
+
+
+def update_graphs_json():
+    with open('graphs.json', 'w') as f:
+        graphs_json = {'all_graphs': {},
+                       'caption': {'graph1.jpg': 'Casos novos de COVID-19 por data de notificação',
+                                   'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação',
+                                   'graph3.jpg': 'Óbitos de COVID-19 por data de notificação',
+                                   'graph4.jpg': 'Óbitos acumulados de COVID-19 por data de notificação'}}
+        json.dump(graphs_json, f, ensure_ascii=False)
+
 
 if __name__ == '__main__':
     download_graphs()
-    Graph.all_graphs = dict()

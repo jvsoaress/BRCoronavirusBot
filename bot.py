@@ -5,7 +5,8 @@ import dadosapi
 import database
 import requests
 import os
-from graphs import Graph
+import json
+
 
 config = ConfigParser()
 config.read('bot.conf')
@@ -24,12 +25,24 @@ except Exception:
     print('Erro! Não foi possível importar as cidades')
 
 
+def check_graphs_json():
+    with open('graphs.json', 'r') as f:
+        graphs_json = json.load(f)
+        return graphs_json
+
+
+def update_graphs_json(all_graphs):
+    with open('graphs.json', 'w') as f:
+        json.dump(all_graphs, f, ensure_ascii=False)
+        return 'Arquivo JSON atualizado!'
+
+
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(msg):
     bot.send_message(chat_id=msg.chat.id,
                      text='Aperte o botão <b>Dados recentes</b> para obter o balanço mais recente'
-                          ' de Coronavírus no Brasil\n\n'
-                          'Para receber notificações diárias, clique em /cadastrar',
+                     ' de Coronavírus no Brasil\n\n'
+                     'Para receber notificações diárias, clique em /cadastrar',
                      reply_markup=botoes,
                      parse_mode='HTML')
 
@@ -60,7 +73,7 @@ def send_brazil_recent_cases(msg):
 def send_state_options(msg):
     bot.send_message(chat_id=msg.chat.id,
                      text='<b>Clique no estado desejado</b>\n\n'
-                          '<em>Caso não saiba a sigla de um estado, clique em SIGLAS</em>',
+                     '<em>Caso não saiba a sigla de um estado, clique em SIGLAS</em>',
                      parse_mode='HTML',
                      reply_markup=estados)
 
@@ -107,18 +120,25 @@ def send_state_recent_cases(call):
 @bot.message_handler(commands=['graficos'])
 def send_graphs(msg):
     print(f'{msg.from_user.id} pediu os gráficos')
+
+    graphs = check_graphs_json()
+    all_graphs = graphs['all_graphs']
+    caption = graphs['caption']
+
     for filename in os.listdir('images'):
-        if len(Graph.all_graphs) == 4:
-            photo = Graph.all_graphs[filename]
+        if len(all_graphs) == 4:
+            photo = all_graphs[filename]
         else:
             print('Foto não está no servidor. Uploading...')
             photo = open(f'images/{filename}', 'rb')
 
         foto = bot.send_photo(chat_id=msg.chat.id,
                               photo=photo,
-                              caption=Graph.caption[filename])
-        Graph.all_graphs[filename] = foto.photo[0].file_id
+                              caption=caption[filename])
         print(f'Arquivo {filename} enviado')
+
+        graphs['all_graphs'][filename] = foto.photo[0].file_id
+    print(update_graphs_json(graphs))
 
 
 bot.polling(timeout=60, none_stop=True)
