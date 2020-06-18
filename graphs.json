@@ -1,1 +1,14 @@
-{"all_graphs": {"graph4.jpg": "AgACAgEAAxkDAAIC8l7rzcfzm7O-06tvx7yekS7palCYAAJ4qDEbZxJYRzCOskKBv1MRp_zwSBcAAwEAAwIAA20AAxtrAAIaBA", "graph2.jpg": "AgACAgEAAxkDAAIC817rzcfRDxquRHaLSdAuBQx5olDUAAJ5qDEbZxJYR6EaEUp_D-ggcpwSMAAEAQADAgADbQADyRIBAAEaBA", "graph3.jpg": "AgACAgEAAxkDAAIC9F7rzchmR7AnlCKHfXADmnE7WPRfAAJ6qDEbZxJYRzy0F1Lhu7r6QLZuBgAEAQADAgADbQAD1ksDAAEaBA", "graph1.jpg": "AgACAgEAAxkDAAIC9V7rzcg1OvuaVNqY3UiaXkfIhlDOAAJ7qDEbZxJYRwE9qhhN0fNVodpuBgAEAQADAgADbQADu6oCAAEaBA"}, "caption": {"graph1.jpg": "Casos novos de COVID-19 por data de notifica\u00e7\u00e3o", "graph2.jpg": "Casos acumulados de COVID-19 por data de notifica\u00e7\u00e3o", "graph3.jpg": "\u00d3bitos de COVID-19 por data de notifica\u00e7\u00e3o", "graph4.jpg": "\u00d3bitos acumulados de COVID-19 por data de notifica\u00e7\u00e3o"}}
+{
+    "all_graphs": {
+        "graph4.jpg": "AgACAgEAAxkDAAIC917rzgELHLQn7wGVvO8BsazoSWgMAAJ4qDEbZxJYRzCOskKBv1MRp_zwSBcAAwEAAwIAA20AAxtrAAIaBA",
+        "graph2.jpg": "AgACAgEAAxkDAAIC-F7rzgJUmRjECUQlGVhpkj_w7uxeAAJ5qDEbZxJYR6EaEUp_D-ggcpwSMAAEAQADAgADbQADyRIBAAEaBA",
+        "graph3.jpg": "AgACAgEAAxkDAAIC-V7rzgL8bt1o4GQQyuqdCiZthT1kAAJ6qDEbZxJYRzy0F1Lhu7r6QLZuBgAEAQADAgADbQAD1ksDAAEaBA",
+        "graph1.jpg": "AgACAgEAAxkDAAIC-l7rzgOnRaUyVre3ztOy7aR6QnFjAAJ7qDEbZxJYRwE9qhhN0fNVodpuBgAEAQADAgADbQADu6oCAAEaBA"
+    },
+    "caption": {
+        "graph1.jpg": "Casos novos de COVID-19 por data de notifica\u00e7\u00e3o",
+        "graph2.jpg": "Casos acumulados de COVID-19 por data de notifica\u00e7\u00e3o",
+        "graph3.jpg": "\u00d3bitos de COVID-19 por data de notifica\u00e7\u00e3o",
+        "graph4.jpg": "\u00d3bitos acumulados de COVID-19 por data de notifica\u00e7\u00e3o"
+    }
+}
