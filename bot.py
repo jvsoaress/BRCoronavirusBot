@@ -104,11 +104,14 @@ def send_state_recent_cases(call):
 
 @bot.message_handler(commands=['graficos'])
 def send_graphs(msg):
-    data = {'chat_id': msg.chat.id}
+    caption = {
+        'graph1.jpg': 'Casos novos de COVID-19 por data de notificação',
+        'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação'
+    }
     for filename in os.listdir('images'):
-        file = {'photo': open(f'images/{filename}', 'rb')}
-        status = requests.post(
-            'https://api.telegram.org/bot1178225049:AAG5o04uRwq7bEZpz2fmQjWH22uO3x7xDu0/sendPhoto', data=data, files=file)
+        bot.send_photo(chat_id=msg.chat.id,
+                       photo=open(f'images/{filename}', 'rb'),
+                       caption=caption[filename])
 
 
 bot.polling(timeout=60, none_stop=True)
