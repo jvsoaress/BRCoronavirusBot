@@ -4,6 +4,16 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 
+class Graph:
+    all_graphs = dict()
+    caption = {
+        'graph1.jpg': 'Casos novos de COVID-19 por data de notificação',
+        'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação',
+        'graph3.jpg': 'Óbitos de COVID-19 por data de notificação',
+        'graph4.jpg': 'Óbitos acumulados de COVID-19 por data de notificação'
+    }
+
+
 def execute_script(driver, image):
     return driver.execute_script("return arguments[0].toDataURL('image/jpg').substring(21);", image)
 
@@ -61,3 +71,4 @@ def download_graphs():
 
 if __name__ == '__main__':
     download_graphs()
+    Graph.all_graphs = dict()

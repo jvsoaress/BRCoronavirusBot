@@ -5,6 +5,7 @@ import dadosapi
 import database
 import requests
 import os
+from graphs import Graph
 
 config = ConfigParser()
 config.read('bot.conf')
@@ -16,13 +17,7 @@ bot = telebot.TeleBot(TOKEN)
 botoes = Buttons().botoes
 estados = Estados().estados
 
-all_graphs = dict()
-caption = {
-    'graph1.jpg': 'Casos novos de COVID-19 por data de notificação',
-    'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação',
-    'graph3.jpg': 'Óbitos de COVID-19 por data de notificação',
-    'graph4.jpg': 'Óbitos acumulados de COVID-19 por data de notificação'
-}
+
 
 try:
     cidades = dadosapi.cidadesbr()
@@ -115,16 +110,16 @@ def send_state_recent_cases(call):
 def send_graphs(msg):
     print(f'{msg.from_user.first_name} pediu os gráficos')
     for filename in os.listdir('images'):
-        if len(all_graphs) == 4:
-            photo = all_graphs[filename]
+        if len(Graph.all_graphs) == 4:
+            photo = Graph.all_graphs[filename]
         else:
             print('Foto não está no servidor. Uploading...')
             photo = open(f'images/{filename}', 'rb')
 
         foto = bot.send_photo(chat_id=msg.chat.id,
                               photo=photo,
-                              caption=caption[filename])
-        all_graphs[filename] = foto.photo[0].file_id
+                              caption=Graph.caption[filename])
+        Graph.all_graphs[filename] = foto.photo[0].file_id
         print(f'Arquivo {filename} enviado')
 
 
