@@ -2,7 +2,7 @@ import telebot
 from configparser import ConfigParser
 from buttons import *
 import dadosapi
-import database
+import telegram_users
 import requests
 import os
 import json
@@ -51,7 +51,7 @@ def send_welcome(msg):
 def register(msg):
     chatid = msg.chat.id
     userid = msg.from_user.id
-    if database.register(chatid, userid):
+    if telegram_users.register(chatid, userid):
         bot.send_message(chat_id=msg.chat.id,
                          text='Usuário cadastrado com sucesso!')
     else:

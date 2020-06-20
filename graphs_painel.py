@@ -1,20 +1,26 @@
-import pandas as pd
-
 from matplotlib import pyplot as plt
 from matplotlib.dates import DateFormatter
 from matplotlib.ticker import MaxNLocator
 
-from sys import argv
+from covid_data import read_data
 
-from requests import get
+from sys import argv
 
 
 class Grafico:
     def __init__(self, figsize=(14, 10)):
-        self.__df = self.__read_data()
+        self.__df = read_data()
         self.__filename = 'default'
         self.__fig = plt.figure(figsize=figsize)
         self.__ax = plt.subplot()
+        self.__funcoes = {
+            'casos_acumulados': graficos.casos_acumulados,
+            'casos_novos': graficos.casos_novos,
+            'obitos_acumulados': graficos.obitos_acumulados,
+            'obitos_novos': graficos.obitos_novos,
+            'casos_full': graficos.casos_full,
+            'obitos_full': graficos.obitos_full
+        }
 
     def casos_acumulados(self, ax=None, semilog=False):
         if ax is None:
@@ -98,14 +104,6 @@ class Grafico:
         ax.yaxis.set_major_locator(MaxNLocator(integer=True))
         ax.xaxis.set_major_formatter(DateFormatter('%d/%m'))
 
-    def __read_data(self):
-        df = pd.read_excel('~/Desktop/HIST_PAINEL_COVIDBR.xlsx')
-        df = df[['data', 'regiao', 'casosAcumulado',
-                 'casosNovos', 'obitosAcumulado', 'obitosNovos']]
-        brasil_df = df[df['regiao'] == 'Brasil'].set_index('data')
-        print('Dados lidos com sucesso!')
-        return brasil_df
-
     def save_as_png(self):
         plt.savefig(f'images/{self.__filename}.png')
         print(f'Arquivo <{self.__filename}> salvo.')
@@ -115,14 +113,6 @@ class Grafico:
 
 if __name__ == '__main__':
     graficos = Grafico()
-    entrada = {
-        'casos_acumulados': graficos.casos_acumulados,
-        'casos_novos': graficos.casos_novos,
-        'obitos_acumulados': graficos.obitos_acumulados,
-        'obitos_novos': graficos.obitos_novos,
-        'casos_full': graficos.casos_full,
-        'obitos_full': graficos.obitos_full
-    }
-    for k, function in entrada.items():
+    for k, function in graficos.entrada.items():
         if k in argv:
             function().save_as_png()
