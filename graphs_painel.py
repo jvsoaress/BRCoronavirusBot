@@ -31,7 +31,7 @@ class Grafico:
 
     def obitos_acumulados(self, semilog=False):
         df = self.__df['obitosAcumulado']
-        title = 'Óbitos acumulados de Covid-19 por data de notificação'
+        self.__title = 'Óbitos acumulados de Covid-19 por data de notificação'
         self.__filename = 'obitos-acumulados'
         self.__color = 'm'
         if semilog:
@@ -41,7 +41,7 @@ class Grafico:
 
     def obitos_novos(self):
         df = self.__df['obitosNovos']
-        title = 'Óbitos novos de Covid-19 por data de notificação'
+        self.__title = 'Óbitos novos de Covid-19 por data de notificação'
         self.__filename = 'obitos-novos'
         self.__color = 'm'
         self.__bar_plot(df)
@@ -49,7 +49,8 @@ class Grafico:
     def __semilog_plot(self, df):
         self.__filename += '-log'
         plt.semilogy(df)
-        plt.title(self.__title)
+        plt.title(self.__title + ' (escala logarítmica)')
+        plt.gcf().set_size_inches(12, 7)
         self.save_as_png()
         if self.__show_graph:
             plt.show()
@@ -59,6 +60,7 @@ class Grafico:
         plt.title(self.__title)
         plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
         plt.gca().xaxis.set_major_formatter(DateFormatter('%d/%m'))
+        plt.gcf().set_size_inches(12, 7)
         self.save_as_png()
         if self.__show_graph:
             plt.show()
@@ -68,6 +70,7 @@ class Grafico:
         plt.title(self.__title)
         plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
         plt.gca().xaxis.set_major_formatter(DateFormatter('%d/%m'))
+        plt.gcf().set_size_inches(12, 7)
         self.save_as_png()
         if self.__show_graph:
             plt.show()
@@ -86,6 +89,28 @@ class Grafico:
         self.obitos_acumulados()
         self.obitos_novos()
 
+    def casos_full(self):
+        df1 = self.__df['casosAcumulado']
+        plt.subplot('211')
+        plt.plot(df1, color='g')
+        plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
+        plt.gca().xaxis.set_major_formatter(DateFormatter('%d/%m'))
+        plt.title(self.__title)
+        df2 = self.__df['casosNovos']
+        plt.subplot('212')
+        plt.bar(df2.index, df2, color='g')
+        plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
+        plt.gca().xaxis.set_major_formatter(DateFormatter('%d/%m'))
+        plt.title(self.__title)
+        plt.gcf().set_size_inches(12, 7)
+        self.__filename = 'casos-full'
+        self.save_as_png()
+        if self.__show_graph:
+            plt.show()
+
+    def obitos(self):
+        pass
+
     def save_as_png(self):
         plt.savefig(f'images/{self.__filename}.png')
         print(f'Arquivo <{self.__filename}> salvo com sucesso!')
@@ -94,15 +119,10 @@ class Grafico:
 
 if __name__ == '__main__':
     graficos = Grafico(show_graph=True)
-    graficos.all_graphs()
+    graficos.casos_full()
+
     # x = range(10, 100, 10)
     # y = list(map(lambda x: x**2, x))
-
-    # plt.figure(1)
     # plt.subplot('211')
     # plt.plot(x, y)
-    # plt.xlabel('eixo x')
-
-    # plt.subplot('212')
-    # plt.plot(y, x)
     # plt.show()
