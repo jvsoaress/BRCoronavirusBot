@@ -73,7 +73,7 @@ def download_data():
     # print('Arquivos salvos com sucesso!')
 
     # print('Atualizando arquivo JSON...')
-    # update_graphs_json()
+    # update_graphs_from_json()
     # print('Arquivo JSON atualizado com sucesso!')
 
 
@@ -86,12 +86,17 @@ def read_data():
     return brasil_df
 
 
-def update_graphs_json():
+def update_graphs_from_json(graphs_metadata):
     with open('graphs.json', 'w') as f:
-        graphs_json = {'all_graphs': {},
-                       'caption': {}}
-        json.dump(graphs_json, f, ensure_ascii=False)
+        json.dump(graphs_metadata, f, ensure_ascii=False)
+    print('Arquivo JSON atualizado com sucesso!')
+
+
+def get_graphs_from_json():
+    with open('graphs.json', 'r') as f:
+        graphs_metadata = json.load(f)
+        return graphs_metadata
 
 
 if __name__ == '__main__':
-    download_data()
+    update_graphs_from_json()

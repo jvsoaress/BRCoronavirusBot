@@ -1,1 +1,10 @@
-{"all_graphs": {}, "caption": {}}
+{
+    "casos-full": {
+        "id": "AgACAgEAAxkDAAIDIV7ukA384ik-FOzSo8w7l6LdgG7gAAKAqDEbJcxxRxB31SMFOnuUFfrwSBcAAwEAAwIAA20AA0l5AAIaBA",
+        "caption": "Casos"
+    },
+    "mortes-full": {
+        "id": "AgACAgEAAxkDAAIDIl7ukA2zUIkuBKKmRs95YGob7PfnAAKBqDEbJcxxR1o6pAHp71O8oqsSMAAEAQADAgADbQADEh0BAAEaBA",
+        "caption": "Mortes"
+    }
+}

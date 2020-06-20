@@ -1,11 +1,12 @@
 import telebot
+import telegram_users
 from configparser import ConfigParser
 from buttons import *
 import dadosapi
-import telegram_users
 import requests
 import os
 import json
+from dados_covid import get_graphs_from_json, update_graphs_from_json
 
 
 config = ConfigParser()
@@ -23,12 +24,6 @@ try:
     print('Cidades importadas com sucesso!')
 except Exception:
     print('Erro! Não foi possível importar as cidades')
-
-
-def check_graphs_json():
-    with open('graphs.json', 'r') as f:
-        graphs_json = json.load(f)
-        return graphs_json
 
 
 def update_graphs_json(all_graphs):
@@ -121,24 +116,24 @@ def send_state_recent_cases(call):
 def send_graphs(msg):
     print(f'{msg.from_user.id} pediu os gráficos')
 
-    graphs = check_graphs_json()
-    all_graphs = graphs['all_graphs']
-    caption = graphs['caption']
-
-    for filename in os.listdir('images'):
-        if len(all_graphs) == 2:
-            photo = all_graphs[filename]
-        else:
+    graphs_metadata = get_graphs_from_json()
+    for filename, metadata in graphs_metadata.items():
+        if metadata['id'] is None:
             print('Foto não está no servidor. Uploading...')
-            photo = open(f'images/{filename}', 'rb')
+            photo = open(f'images/{filename}.png', 'rb')
+            
+            foto = bot.send_photo(chat_id=msg.chat.id,
+                                  photo=photo,
+                                  caption=metadata['caption'])
+            graphs_metadata[filename]['id'] = foto.photo[0].file_id
+            update_graphs_from_json(graphs_metadata)
+        else:
+            photo = metadata['id']
+            foto = bot.send_photo(chat_id=msg.chat.id,
+                                  photo=photo,
+                                  caption=metadata['caption'])
 
-        foto = bot.send_photo(chat_id=msg.chat.id,
-                              photo=photo,
-                              caption=caption[filename])
-        print(f'Arquivo {filename} enviado')
-
-        graphs['all_graphs'][filename] = foto.photo[0].file_id
-    print(update_graphs_json(graphs))
+        print(f'Arquivo <{filename}> enviado')
 
 
 bot.polling(timeout=60, none_stop=True)

@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from matplotlib.dates import DateFormatter
 from matplotlib.ticker import MaxNLocator
 
-from dados_covid import read_data, update_graphs_json
+from dados_covid import read_data, update_graphs_from_json
 
 from sys import argv
 
@@ -16,11 +16,21 @@ class Grafico:
         self.funcoes = {
             'casos_acumulados': self.casos_acumulados,
             'casos_novos': self.casos_novos,
-            'obitos_acumulados': self.obitos_acumulados,
-            'obitos_novos': self.obitos_novos,
+            'mortes_acumuladas': self.mortes_acumuladas,
+            'mortes_novas': self.mortes_novas,
             'casos_full': self.casos_full,
-            'obitos_full': self.obitos_full
+            'mortes_full': self.mortes_full
         }
+
+    @property
+    def filename(self):
+        return self.__filename
+
+    @property
+    def caption(self):
+        caption = self.__filename.capitalize().replace('-', ' ')
+        caption = caption.replace('full', '').strip()
+        return caption
 
     def casos_acumulados(self, ax=None, semilog=False):
         if ax is None:
@@ -45,12 +55,12 @@ class Grafico:
         self.__bar_plot(df, ax, title, color)
         return self
 
-    def obitos_acumulados(self, ax=None, semilog=False):
+    def mortes_acumuladas(self, ax=None, semilog=False):
         if ax is None:
             ax = self.__ax
         df = self.__df['obitosAcumulado']
         title = 'Óbitos acumulados de Covid-19 por data de notificação'
-        self.__filename = 'obitos-acumulados'
+        self.__filename = 'mortes-acumuladas'
         color = 'm'
         if semilog:
             self.__semilog_plot(df, ax, title, color)
@@ -58,12 +68,12 @@ class Grafico:
             self.__line_plot(df, ax, title, color)
         return self
 
-    def obitos_novos(self, ax=None):
+    def mortes_novas(self, ax=None):
         if ax is None:
             ax = self.__ax
         df = self.__df['obitosNovos']
         title = 'Óbitos novos de Covid-19 por data de notificação'
-        self.__filename = 'obitos-novos'
+        self.__filename = 'mortes-novas'
         color = 'm'
         self.__bar_plot(df, ax, title, color)
         return self
@@ -77,13 +87,13 @@ class Grafico:
         self.__filename = 'casos-full'
         return self
 
-    def obitos_full(self):
+    def mortes_full(self):
         fig, (ax1, ax2) = plt.subplots(2, 1)
         fig.set_size_inches((12, 12))
-        self.obitos_acumulados(ax1)
-        self.obitos_novos(ax2)
+        self.mortes_acumuladas(ax1)
+        self.mortes_novas(ax2)
 
-        self.__filename = 'obitos-full'
+        self.__filename = 'mortes-full'
         return self
 
     def __semilog_plot(self, df, ax, title, color='b'):
@@ -112,8 +122,13 @@ class Grafico:
 
 
 if __name__ == '__main__':
+    graphs_metadata = {}
     graficos = Grafico()
     for k, function in graficos.funcoes.items():
         if k in argv:
-            function().save_as_png()
-    update_graphs_json()
+            arquivo = function()
+            filename = arquivo.filename
+            caption = arquivo.caption
+            arquivo.save_as_png()
+            graphs_metadata[filename] = {'id': None, 'caption': caption}
+    update_graphs_from_json(graphs_metadata)
