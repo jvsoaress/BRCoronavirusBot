@@ -89,10 +89,7 @@ def read_data():
 def update_graphs_json():
     with open('graphs.json', 'w') as f:
         graphs_json = {'all_graphs': {},
-                       'caption': {'graph1': 'Casos novos de COVID-19 por data de notificação',
-                                   'graph2.jpg': 'Casos acumulados de COVID-19 por data de notificação',
-                                   'graph3.jpg': 'Óbitos de COVID-19 por data de notificação',
-                                   'graph4.jpg': 'Óbitos acumulados de COVID-19 por data de notificação'}}
+                       'caption': {}}
         json.dump(graphs_json, f, ensure_ascii=False)
 
 

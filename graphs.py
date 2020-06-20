@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from matplotlib.dates import DateFormatter
 from matplotlib.ticker import MaxNLocator
 
-from covid_data import read_data
+from dados_covid import read_data, update_graphs_json
 
 from sys import argv
 
@@ -13,13 +13,13 @@ class Grafico:
         self.__filename = 'default'
         self.__fig = plt.figure(figsize=figsize)
         self.__ax = plt.subplot()
-        self.__funcoes = {
-            'casos_acumulados': graficos.casos_acumulados,
-            'casos_novos': graficos.casos_novos,
-            'obitos_acumulados': graficos.obitos_acumulados,
-            'obitos_novos': graficos.obitos_novos,
-            'casos_full': graficos.casos_full,
-            'obitos_full': graficos.obitos_full
+        self.funcoes = {
+            'casos_acumulados': self.casos_acumulados,
+            'casos_novos': self.casos_novos,
+            'obitos_acumulados': self.obitos_acumulados,
+            'obitos_novos': self.obitos_novos,
+            'casos_full': self.casos_full,
+            'obitos_full': self.obitos_full
         }
 
     def casos_acumulados(self, ax=None, semilog=False):
@@ -113,6 +113,7 @@ class Grafico:
 
 if __name__ == '__main__':
     graficos = Grafico()
-    for k, function in graficos.entrada.items():
+    for k, function in graficos.funcoes.items():
         if k in argv:
             function().save_as_png()
+    update_graphs_json()

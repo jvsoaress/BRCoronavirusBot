@@ -126,7 +126,7 @@ def send_graphs(msg):
     caption = graphs['caption']
 
     for filename in os.listdir('images'):
-        if len(all_graphs) == 4:
+        if len(all_graphs) == 2:
             photo = all_graphs[filename]
         else:
             print('Foto não está no servidor. Uploading...')
