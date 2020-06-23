@@ -126,8 +126,8 @@ class Grafico:
 
 if __name__ == '__main__':
     graphs_metadata = {}
-    graficos = Grafico()
     print('Iniciando leitura dos dados...')
+    graficos = Grafico()
     for k, function in graficos.funcoes.items():
         if k in argv:
             arquivo = function()
