@@ -12,10 +12,12 @@ def time_format(data):
 
 
 def format_city_name(city):
-    palavras = ('da', 'de', 'do', 'du')
-    for item in palavras:
-        city = city.replace(item.capitalize(), item)
-    return city
+    palavras = ('da', 'de', 'di', 'do', 'du')
+    city = city.split(' ')
+    for pos, item in enumerate(city):
+        if item in 'DaDeDiDoDu':
+            city[pos] = item.lower()
+    return ' '.join(city)
 
 
 # lista casos no Brasil em data específica
@@ -74,13 +76,13 @@ def all_states_cases():
 def cidadesbr():
     r = requests.get('https://servicodados.ibge.gov.br/api/v1/localidades/municipios/?orderBy=nome')
     if r.ok:
-        return [item['nome'].upper() for item in r.json()]
+        return [(item['nome'].upper(), item['microrregiao']['mesorregiao']['UF']['sigla']) for item in r.json()]
 
 
 # lista casos por cidade (API: brasil.io)
-def city_recent_cases(city, to_string=True):
+def city_recent_cases(city, state=None, to_string=True):
     city = format_city_name(city.title())
-    params = {'city': city, 'is_last': True}
+    params = {'city': city, 'state': state, 'is_last': True}
     r = requests.get('https://brasil.io/api/dataset/covid19/caso_full/data/?format=json', params=params)
     if r.ok:
         dados = r.json()
@@ -88,17 +90,14 @@ def city_recent_cases(city, to_string=True):
             try:
                 dados = dados['results'][0]
             except IndexError:
-                dados = dados['results']
-                print(dados)
-                return 'Houve um erro, tente novamente'
+                return 'Houve um erro. Tente novamente'
             data = dados['date'].split('-')
             data = f'{data[2]}/{data[1]}'
-
-            msg = f'\U0001F6A8 <b>Dados recentes de Covid-19 | {dados["state"]} ({dados["city"]})</b>\n\n' \
-                  f'\U00002705 <b>Casos confirmados:</b> {dados["last_available_confirmed"]}' \
-                  f' ({dados["new_confirmed"]} em 24h)\n' \
-                  f'\U00002620 <b>Mortes:</b> {dados["last_available_deaths"]} ({dados["new_deaths"]} em 24h)\n' \
-                  f'<em>Atualizado em {data}</em>'
+            msg = f'\U0001F6A8 <b>Dados recentes de Covid-19 | {dados["state"]} ({dados["city"]})</b>\n\n'\
+                f'\U00002705 <b>Casos confirmados:</b> {dados["last_available_confirmed"]}'\
+                f' ({dados["new_confirmed"]} em 24h)\n'\
+                f'\U00002620 <b>Mortes:</b> {dados["last_available_deaths"]} ({dados["new_deaths"]} em 24h)\n'\
+                f'<em>Atualizado em {data}</em>'
             return msg
         return dados
 

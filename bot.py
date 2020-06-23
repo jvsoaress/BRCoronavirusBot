@@ -7,6 +7,7 @@ import requests
 import os
 import json
 from dados_covid import *
+import re
 
 
 config = ConfigParser()
@@ -16,14 +17,36 @@ TOKEN = config['BRCORONAVIRUSBOT']['TOKEN']
 
 bot = telebot.TeleBot(TOKEN)
 
-botoes = Buttons().botoes
-estados = Estados().estados
-
 try:
     cidades = dadosapi.cidadesbr()
     print('Cidades importadas com sucesso!')
 except Exception:
     print('Erro! Não foi possível importar as cidades')
+
+nomes_cidades = list(map(lambda x: x[0], cidades))
+repetidas = [(cid, uf)
+             for (cid, uf) in cidades if nomes_cidades.count(cid) > 1]
+
+pattern = re.compile(r'(\*[A-Z]{2})$')
+
+
+def cidade_repetida(msg):
+    lista = []
+    retornar = False
+    for cid, uf in repetidas:
+        if msg.text.upper() == cid:
+            cidade = cid
+            lista.append(uf)
+            retornar = True
+    if retornar:
+        options = CidadeRepetida(lista, cidade)
+        bot.send_message(chat_id=msg.chat.id,
+                         text=f'Há {options.cont} municípios com o nome <b>{msg.text.title()}</b>\n',
+                         parse_mode='HTML',
+                         reply_markup=options.reply_markup)
+        return True
+    else:
+        return False
 
 
 def update_graphs_json(all_graphs):
@@ -36,9 +59,9 @@ def update_graphs_json(all_graphs):
 def send_welcome(msg):
     bot.send_message(chat_id=msg.chat.id,
                      text='Aperte o botão <b>Dados recentes</b> para obter o balanço mais recente'
-                     ' de Coronavírus no Brasil\n\n'
-                     'Para receber notificações diárias, clique em /cadastrar',
-                     reply_markup=botoes,
+                          ' de Coronavírus no Brasil\n\n'
+                          'Para receber notificações diárias, clique em /cadastrar',
+                     reply_markup=Buttons.botoes,
                      parse_mode='HTML')
 
 
@@ -61,7 +84,7 @@ def send_brazil_recent_cases(msg):
     footer = '\n\n<b>Ver gráficos:</b> /graficos'
     texto = titulo + cases + footer
     bot.send_message(chat_id=msg.chat.id, text=texto,
-                     reply_markup=botoes, parse_mode='HTML')
+                     reply_markup=Buttons.botoes, parse_mode='HTML')
 
 
 @bot.message_handler(func=lambda m: m.text == 'Dados por estado')
@@ -70,26 +93,30 @@ def send_state_options(msg):
                      text='<b>Clique no estado desejado</b>\n\n'
                      '<em>Caso não saiba a sigla de um estado, clique em SIGLAS</em>',
                      parse_mode='HTML',
-                     reply_markup=estados)
+                     reply_markup=Estados.estados)
 
 
 @bot.message_handler(func=lambda m: m.text == 'Dados por cidade')
 def send_city_options(msg):
     bot.send_message(chat_id=msg.chat.id,
-                     text='Ok! Me envie o nome da cidade (com acentos)\n',
-                     parse_mode='HTML')
+                     text='Ok! Me envie o nome da cidade (com acentos)',
+                     parse_mode='HTML',
+                     reply_markup=t.ForceReply())
 
 
-@bot.message_handler(func=lambda m: m.text.upper() in cidades)
+@bot.message_handler(func=lambda m: m.reply_to_message)
 def send_city_recent_cases(msg):
-    print(f'Dados por cidade: {msg.text}')
-    texto = dadosapi.city_recent_cases(msg.text.strip())
-    bot.send_message(chat_id=msg.chat.id,
-                     text=texto,
-                     parse_mode='HTML')
+    if msg.text.upper() in nomes_cidades:
+        if not cidade_repetida(msg):
+            print(f'Dados por cidade: {msg.text}')
+            texto = dadosapi.city_recent_cases(msg.text)
+            bot.send_message(chat_id=msg.chat.id,
+                             text=texto,
+                             parse_mode='HTML',
+                             reply_markup=Buttons.botoes)
 
 
-@bot.callback_query_handler(func=lambda call: True)
+@bot.callback_query_handler(func=lambda call: '*' not in call.data)
 def send_state_recent_cases(call):
     if call.data == 'SIGLAS':
         texto = '<b>Siglas dos estados brasileiros</b>\n\n' \
@@ -103,7 +130,7 @@ def send_state_recent_cases(call):
                               message_id=call.message.message_id,
                               text=texto,
                               parse_mode='HTML',
-                              reply_markup=estados)
+                              reply_markup=Estados.estados)
     else:
         texto = dadosapi.state_recent_cases(call.data)
         bot.edit_message_text(chat_id=call.message.chat.id,
@@ -121,7 +148,7 @@ def send_graphs(msg):
         if metadata['id'] is None:
             print('Foto não está no servidor. Uploading...')
             photo = open(f'images/{filename}.png', 'rb')
-            
+
             foto = bot.send_photo(chat_id=msg.chat.id,
                                   photo=photo,
                                   caption=metadata['caption'])
@@ -134,6 +161,21 @@ def send_graphs(msg):
                                   caption=metadata['caption'])
 
         print(f'Arquivo <{filename}> enviado')
+
+
+@bot.callback_query_handler(func=lambda call: pattern.search(call.data))
+def send_chosen_city_recent_cases(call):
+    cidade, estado = call.data.split('*')
+    print(f'Dados por cidade repetida: {cidade} ({estado})')
+    texto = dadosapi.city_recent_cases(cidade, estado)
+
+    bot.send_message(chat_id=call.message.chat.id,
+                     text=texto,
+                     parse_mode='HTML',
+                     reply_markup=Buttons.botoes)
+
+    bot.delete_message(chat_id=call.message.chat.id,
+                       message_id=call.message.message_id)
 
 
 bot.polling(timeout=60, none_stop=True)
