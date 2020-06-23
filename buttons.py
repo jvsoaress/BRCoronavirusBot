@@ -45,3 +45,19 @@ class Estados:
     estados.row(PR, PE, PI, RJ, RN)
     estados.row(RS, RO, RR, SC, SP)
     estados.row(SE, TO, SIGLAS)
+
+
+class CidadeRepetida:
+    def __init__(self, uf, cidade):
+        self.uf = uf
+        self.markup = t.InlineKeyboardMarkup()
+        self.cont = len(uf)
+        self.cid = cidade
+
+    @property
+    def reply_markup(self):
+        buttons = [
+            self.markup.add(
+                t.InlineKeyboardButton(f'{self.cid} ({uf})', callback_data=f'{self.cid}*{uf}')) for uf in self.uf
+        ]
+        return self.markup
