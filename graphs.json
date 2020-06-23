@@ -1,10 +1,1 @@
-{
-    "casos-full": {
-        "id": null,
-        "caption": "Casos"
-    },
-    "mortes-full": {
-        "id": null,
-        "caption": "Mortes"
-    }
-}
+{"casos-full": {"id": "AgACAgEAAxkDAAIEv17yX8IFW_wpRGKX27zkTERcXFhdAAIqqTEbztmQR_bfwL9BRFbWW9duBgAEAQADAgADbQADccQCAAEaBA", "caption": "Casos"}, "mortes-full": {"id": "AgACAgEAAxkDAAIEwF7yX8N5SdfsAAEGJtNHc-l0-ip5PQACK6kxG87ZkEdWwdYeenQZXvx070gXAAMBAAMCAANtAAMshwACGgQ", "caption": "Mortes"}}

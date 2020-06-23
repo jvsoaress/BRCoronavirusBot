@@ -12,10 +12,9 @@ def time_format(data):
 
 
 def format_city_name(city):
-    palavras = ('da', 'de', 'di', 'do', 'du')
     city = city.split(' ')
     for pos, item in enumerate(city):
-        if item in 'DaDeDiDoDu':
+        if item in 'DasDesDisDosDus':
             city[pos] = item.lower()
     return ' '.join(city)
 
