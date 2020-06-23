@@ -1,10 +1,1 @@
-{
-    "casos-full": {
-        "id": "AgACAgEAAxkDAAIDIV7ukA384ik-FOzSo8w7l6LdgG7gAAKAqDEbJcxxRxB31SMFOnuUFfrwSBcAAwEAAwIAA20AA0l5AAIaBA",
-        "caption": "Casos"
-    },
-    "mortes-full": {
-        "id": "AgACAgEAAxkDAAIDIl7ukA2zUIkuBKKmRs95YGob7PfnAAKBqDEbJcxxR1o6pAHp71O8oqsSMAAEAQADAgADbQADEh0BAAEaBA",
-        "caption": "Mortes"
-    }
-}
+{"casos-full": {"id": "AgACAgEAAxkDAAIDM17xTsZEU-7NSmPCvdQ85SzDck9GAAKiqDEbvJWJR7ap14fzW0A-isBuBgAEAQADAgADbQAD8lQDAAEaBA", "caption": "Casos"}, "mortes-full": {"id": "AgACAgEAAxkDAAIDNF7xTscMve75XVHTacRo7d8jkg5cAAKjqDEbvJWJR2jKQ5-Sp-_oerNuBgAEAQADAgADbQAD3VkDAAEaBA", "caption": "Mortes"}}

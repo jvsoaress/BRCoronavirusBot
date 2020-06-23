@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from matplotlib.dates import DateFormatter
 from matplotlib.ticker import MaxNLocator
 
-from dados_covid import read_data, update_graphs_from_json
+from dados_covid import *
 
 from sys import argv
 
@@ -123,6 +123,7 @@ class Grafico:
 
 if __name__ == '__main__':
     graphs_metadata = {}
+    print('Iniciando leitura dos dados...')
     graficos = Grafico()
     for k, function in graficos.funcoes.items():
         if k in argv:

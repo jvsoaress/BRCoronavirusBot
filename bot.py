@@ -6,7 +6,7 @@ import dadosapi
 import requests
 import os
 import json
-from dados_covid import get_graphs_from_json, update_graphs_from_json
+from dados_covid import *
 
 
 config = ConfigParser()

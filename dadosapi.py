@@ -88,6 +88,8 @@ def city_recent_cases(city, to_string=True):
             try:
                 dados = dados['results'][0]
             except IndexError:
+                dados = dados['results']
+                print(dados)
                 return 'Houve um erro, tente novamente'
             data = dados['date'].split('-')
             data = f'{data[2]}/{data[1]}'
@@ -126,4 +128,4 @@ def all_countries_cases():
 
 
 if __name__ == '__main__':
-    print(city_recent_cases('são caetano do sul'))
+    print(city_recent_cases('Douradina'))
