@@ -97,6 +97,7 @@ class Grafico:
         return self
 
     def __semilog_plot(self, df, ax, title, color='b'):
+        plt.style.use('fivethirtyeight')
         self.__filename += '-log'
         self.__ax.semilogy(df, color=color)
         self.__ax.set_title(title + ' (escala logarítmica)')
@@ -107,12 +108,14 @@ class Grafico:
         ax.set_title(title)
         ax.yaxis.set_major_locator(MaxNLocator(integer=True))
         ax.xaxis.set_major_formatter(DateFormatter('%d/%m'))
+        ax.yaxis.grid(True)
 
     def __bar_plot(self, df, ax, title, color):
         ax.bar(df.index, df, color=color)
         ax.set_title(title)
         ax.yaxis.set_major_locator(MaxNLocator(integer=True))
         ax.xaxis.set_major_formatter(DateFormatter('%d/%m'))
+        ax.yaxis.grid(True)
 
     def save_as_png(self):
         plt.savefig(f'images/{self.__filename}.png')
