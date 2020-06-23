@@ -4,3 +4,4 @@ venv
 users.csv
 covidenv/
 .vscode/
+.idea
