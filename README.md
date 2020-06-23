@@ -23,11 +23,20 @@ Now install all the required Python packages by typing
 
 <code>pip install -r requirements.txt</code>
 
-Insert your bot TOKEN on <b>sample.conf</b> and rename it to <b>bot.conf</b>.
+Insert your bot TOKEN on <code>sample.conf</code> and rename it to <code>bot.conf</code>.
+
+*In order for the bot to run properly, I've set up a cronjob to execute <code>graphs.py</code> and <code>routine.py</code>.
+The file <code>graphs.py</code> download graphs from https://covid.saude.gov.br as a JPG file and move them to <code>images</code> folder. The file <code>routine.py</code> sends a notification to users.
 
 ## Run
 
 First configure your bot. Check [Telegram's API](https://core.telegram.org/bots/api) documentation, section **Authorizing your bot.** You can use [BotFather](https://core.telegram.org/bots#6-botfather) to create your bot's token, which should be add into [bot.conf](https://github.com/bessavagner/BRCoronavirusBot/blob/master/sample.conf).
+
+To ensure all JPG graphs are updated, execute <code>graphs.py</code> by typing
+
+<code>python graphs.py</code>
+
+You should see a new folder called <code>images</code>.
 
 To start receiving messages just type
 
