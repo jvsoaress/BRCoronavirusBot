@@ -21,19 +21,19 @@ def format_city_name(city):
 
 # lista casos no Brasil em data específica
 def brazil_recent_cases(to_string=True):
-    hoje = str(date.today())
-    hoje = hoje.split('-')
-    hoje = ''.join(hoje)
-    r = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/brazil/', params=hoje)
+    url = 'https://xx9p7hp1p7.execute-api.us-east-1.amazonaws.com/prod/PortalGeralApi'
+    r = requests.get(url)
     if r.ok:
         dados = r.json()
-        dados = dados['data']
+        data = dados['dt_updated']
+        data = time_format(data)
+        confirmados = dados['confirmados']
+        obitos = dados['obitos']
         if to_string:
-            data = dados['updated_at']
-            data = time_format(data)
-            msg = f'\U00002705 <b>Casos confirmados:</b> {dados["confirmed"]}\n' \
-                  f'\U00002620 <b>Mortes:</b> {dados["deaths"]}\n' \
-                  f'\U0001F504 <b>Recuperados:</b> {dados["recovered"]}\n' \
+            msg = f'\U00002705 <b>Casos confirmados:</b> {confirmados["total"]}\n' \
+                  f'\U00002620 <b>Mortes:</b> {obitos["total"]} ({obitos["novos"]} em 24h)\n' \
+                  f'\U0001F504 <b>Recuperados:</b> {confirmados["recuperados"]}\n' \
+                  f'\U0001F50D <b>Em acompanhamento:</b> {confirmados["acompanhamento"]}\n' \
                   f'<em>Atualizado em {data.day:0>2}/{data.month:0>2} às {data.time()}</em>'
             return msg
         return dados
@@ -126,4 +126,4 @@ def all_countries_cases():
 
 
 if __name__ == '__main__':
-    print(city_recent_cases('Douradina'))
+    print(brazil_recent_cases())
