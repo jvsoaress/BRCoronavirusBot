@@ -60,17 +60,6 @@ def state_recent_cases(uf, to_string=True):
     return None
 
 
-# lista casos por todos os estados brasileiros
-def all_states_cases():
-    r = requests.get('https://covid19-brazil-api.now.sh/api/report/v1')
-    if r.ok:
-        dados = r.json()
-        dados = dados['data']
-        return dados
-
-    return None
-
-
 # lista das cidades (API: IBGE)
 def cidadesbr():
     r = requests.get('https://servicodados.ibge.gov.br/api/v1/localidades/municipios/?orderBy=nome')
@@ -114,16 +103,5 @@ def country_cases(pais='brazil'):
     return None
 
 
-# lista casos por todos os países
-def all_countries_cases():
-    r = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/countries')
-    if r.ok:
-        dados = r.json()
-        dados = dados['data']
-        return dados
-
-    return None
-
-
 if __name__ == '__main__':
-    print(brazil_recent_cases())
+    country_ranking()
