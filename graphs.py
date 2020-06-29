@@ -126,13 +126,22 @@ class Grafico:
 
 if __name__ == '__main__':
     graphs_metadata = {}
-    print('Iniciando leitura dos dados...')
     graficos = Grafico()
-    for k, function in graficos.funcoes.items():
-        if k in argv:
-            arquivo = function()
+    if len(argv) > 1:
+        for k, function in graficos.funcoes.items():
+            if k in argv:
+                arquivo = function()
+                filename = arquivo.filename
+                caption = arquivo.caption
+                arquivo.save_as_png()
+                graphs_metadata[filename] = {'id': None, 'caption': caption}
+    else:
+        keys = 'casos_full', 'mortes_full'
+        for function in keys:
+            arquivo = graficos.funcoes[function]()
             filename = arquivo.filename
             caption = arquivo.caption
             arquivo.save_as_png()
             graphs_metadata[filename] = {'id': None, 'caption': caption}
+
     update_graphs_from_json(graphs_metadata)
