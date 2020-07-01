@@ -92,16 +92,5 @@ def city_recent_cases(city, state=None, to_string=True):
     return None
 
 
-# lista casos por país
-def country_cases(pais='brazil'):
-    r = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/', params=pais)
-    if r.ok:
-        dados = r.json()
-        dados = dados['data']
-        return dados
-
-    return None
-
-
 if __name__ == '__main__':
-    country_ranking()
+    pass

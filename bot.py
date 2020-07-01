@@ -6,6 +6,7 @@ import dadosapi
 import requests
 import os
 import json
+from country_ranking import *
 from dados_covid import *
 import re
 
@@ -176,6 +177,11 @@ def send_chosen_city_recent_cases(call):
 
     bot.delete_message(chat_id=call.message.chat.id,
                        message_id=call.message.message_id)
+
+@bot.message_handler(commands=['ranking'])
+def send_country_ranking(msg):
+    ranking = get_ranking_from_json()
+    print(ranking)
 
 
 bot.polling(timeout=60, none_stop=True)
