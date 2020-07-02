@@ -39,7 +39,7 @@ def get_ranking_from_json():
 
 
 # monta um ranking com base nos dados atuais e salva em arquivo JSON
-def create_json_ranking(top=5):
+def create_json_ranking(top=10):
     r = requests.get('https://api.covid19api.com/summary')
     dados = r.json()['Countries']
     df_full = pd.DataFrame.from_dict(dados).sort_values(
