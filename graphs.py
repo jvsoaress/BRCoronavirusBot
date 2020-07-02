@@ -2,14 +2,14 @@ from matplotlib import pyplot as plt
 from matplotlib.dates import DateFormatter
 from matplotlib.ticker import MaxNLocator
 
-from dados_covid import *
+from dados_covid import read_data_from_ms, update_graphs_in_json
 
 from sys import argv
 
 
 class Grafico:
     def __init__(self, figsize=(14, 10)):
-        self.__df = read_data()
+        self.__df = read_data_from_ms()
         self.__filename = 'default'
         self.__fig = plt.figure(figsize=figsize)
         self.__ax = plt.subplot()
@@ -144,4 +144,4 @@ if __name__ == '__main__':
             arquivo.save_as_png()
             graphs_metadata[filename] = {'id': None, 'caption': caption}
 
-    update_graphs_from_json(graphs_metadata)
+    update_graphs_in_json(graphs_metadata)

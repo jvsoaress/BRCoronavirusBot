@@ -2,9 +2,7 @@ import telebot
 import telegram_users
 from configparser import ConfigParser
 from buttons import *
-from dados_covid import *
-from country_ranking import *
-import dadosapi
+import dados_covid
 import requests
 import os
 import json
@@ -19,7 +17,7 @@ TOKEN = config['BRCORONAVIRUSBOT']['TOKEN']
 bot = telebot.TeleBot(TOKEN)
 
 try:
-    cidades = dadosapi.cidadesbr()
+    cidades = dados_covid.cidadesbr()
     print('Cidades importadas com sucesso!')
 except Exception:
     print('Erro! Não foi possível importar as cidades')
@@ -80,10 +78,7 @@ def register(msg):
 
 @bot.message_handler(func=lambda m: m.text == 'Dados recentes')
 def send_brazil_recent_cases(msg):
-    titulo = '\U0001F6A8 <b>Dados recentes de Covid-19 no Brasil</b>\n\n'
-    cases = dadosapi.brazil_recent_cases()
-    footer = '\n\n<b>Ver gráficos:</b> /graficos'
-    texto = titulo + cases + footer
+    texto = dados_covid.brazil_recent_cases()
     bot.send_message(chat_id=msg.chat.id, text=texto,
                      reply_markup=Buttons.botoes, parse_mode='HTML')
 
@@ -110,7 +105,7 @@ def send_city_recent_cases(msg):
     if msg.text.upper() in nomes_cidades:
         if not cidade_repetida(msg):
             print(f'Dados por cidade: {msg.text}')
-            texto = dadosapi.city_recent_cases(msg.text)
+            texto = dados_covid.city_recent_cases(msg.text)
             bot.send_message(chat_id=msg.chat.id,
                              text=texto,
                              parse_mode='HTML',
@@ -133,7 +128,7 @@ def send_state_recent_cases(call):
                               parse_mode='HTML',
                               reply_markup=Estados.estados)
     else:
-        texto = dadosapi.state_recent_cases(call.data)
+        texto = dados_covid.state_recent_cases(call.data)
         bot.edit_message_text(chat_id=call.message.chat.id,
                               message_id=call.message.message_id,
                               text=texto,
@@ -144,7 +139,7 @@ def send_state_recent_cases(call):
 def send_graphs(msg):
     print(f'{msg.from_user.id} pediu os gráficos')
 
-    graphs_metadata = get_graphs_from_json()
+    graphs_metadata = dados_covid.get_graphs_from_json()
     for filename, metadata in graphs_metadata.items():
         if metadata['id'] is None:
             print('Foto não está no servidor. Uploading...')
@@ -154,7 +149,7 @@ def send_graphs(msg):
                                   photo=photo,
                                   caption=metadata['caption'])
             graphs_metadata[filename]['id'] = foto.photo[0].file_id
-            update_graphs_from_json(graphs_metadata)
+            dados_covid.update_graphs_in_json(graphs_metadata)
         else:
             photo = metadata['id']
             foto = bot.send_photo(chat_id=msg.chat.id,
@@ -168,7 +163,7 @@ def send_graphs(msg):
 def send_chosen_city_recent_cases(call):
     cidade, estado = call.data.split('*')
     print(f'Dados por cidade repetida: {cidade} ({estado})')
-    texto = dadosapi.city_recent_cases(cidade, estado)
+    texto = dados_covid.city_recent_cases(cidade, estado)
 
     bot.send_message(chat_id=call.message.chat.id,
                      text=texto,
@@ -181,7 +176,7 @@ def send_chosen_city_recent_cases(call):
 
 @bot.message_handler(commands=['ranking'])
 def send_country_ranking(msg):
-    texto = get_ranking_from_json()
+    texto = dados_covid.get_ranking_from_json(top=10)
     bot.send_message(chat_id=msg.chat.id, text=texto, parse_mode='HTML')
 
 
