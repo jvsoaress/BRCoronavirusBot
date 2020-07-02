@@ -24,14 +24,11 @@ def register(chatid, userid):
         return True
 
 
-# Returns a list of registered chat ids to send notification to
+# retorna uma lista de Chat IDs cadastrados em users.csv
 def notify():
-    chatid_list = list()
     with open('users.csv', 'r') as arquivo:
         leitor = DictReader(f=arquivo)
-        for linha in leitor:
-            chatid_list.append(linha['chatid'])
-    return chatid_list
+        return [linha['chatid'] for linha in leitor]
 
 
 if __name__ == '__main__':
