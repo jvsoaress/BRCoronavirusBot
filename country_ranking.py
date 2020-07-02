@@ -31,7 +31,7 @@ def get_ranking_from_json():
         dados = json.load(f)
     texto = f'{"País":<20}Casos confirmados\n'
     for j in range(len(dados['Country'])):
-        texto += f'{dados["Country"][str(j)]:<20}{dados["TotalConfirmed"][str(j)]}\n'
+        texto += f'{j+1}) {dados["Country"][str(j)]:<20}{dados["TotalConfirmed"][str(j)]}\n'
     return texto
 
 
@@ -49,4 +49,3 @@ def create_json_ranking(top=5):
 
 if __name__ == '__main__':
     create_json_ranking()
-    get_ranking_from_json()

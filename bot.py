@@ -2,12 +2,12 @@ import telebot
 import telegram_users
 from configparser import ConfigParser
 from buttons import *
+from dados_covid import *
+from country_ranking import *
 import dadosapi
 import requests
 import os
 import json
-from country_ranking import *
-from dados_covid import *
 import re
 
 
