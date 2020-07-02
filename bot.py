@@ -178,10 +178,11 @@ def send_chosen_city_recent_cases(call):
     bot.delete_message(chat_id=call.message.chat.id,
                        message_id=call.message.message_id)
 
+
 @bot.message_handler(commands=['ranking'])
 def send_country_ranking(msg):
     texto = get_ranking_from_json()
-    bot.send_message(chat_id=msg.chat.id, text=texto)
+    bot.send_message(chat_id=msg.chat.id, text=texto, parse_mode='HTML')
 
 
 bot.polling(timeout=60, none_stop=True)

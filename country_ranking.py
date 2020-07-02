@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
 import json
+import flag
 
 translation = {
     'United States of America': 'Estados Unidos',
@@ -29,9 +30,11 @@ translation = {
 def get_ranking_from_json():
     with open('country_ranking.json') as f:
         dados = json.load(f)
-    texto = f'{"País":<20}Casos confirmados\n'
+    texto = '<b>\U0001F6A8 Ranking dos países com Covid-19</b>\n\n'
+    texto += f'<code>   {"País":<17}Casos</code>\n'
     for j in range(len(dados['Country'])):
-        texto += f'{j+1}) {dados["Country"][str(j)]:<20}{dados["TotalConfirmed"][str(j)]}\n'
+        bandeira = flag.flag(dados['CountryCode'][str(j)])
+        texto += f'<code>{bandeira} {dados["Country"][str(j)]:<17}{dados["TotalConfirmed"][str(j)]}</code>\n'
     return texto
 
 
