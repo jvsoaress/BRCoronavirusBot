@@ -110,6 +110,10 @@ def send_city_recent_cases(msg):
                              text=texto,
                              parse_mode='HTML',
                              reply_markup=Buttons.botoes)
+    else:
+        bot.send_message(chat_id=msg.chat.id,
+                         text='Cidade não encontrada. Verifique os acentos e tente novamente.',
+                         reply_markup=Buttons.botoes)
 
 
 @bot.callback_query_handler(func=lambda call: '*' not in call.data)
