@@ -2,11 +2,13 @@ autopep8==1.5.3
 certifi==2020.4.5.1
 chardet==3.0.4
 cycler==0.10.0
+emoji-country-flag==1.2.1
 idna==2.9
 kiwisolver==1.2.0
 matplotlib==3.2.2
 numpy==1.18.5
 pandas==1.0.5
+pkg-resources==0.0.0
 pycodestyle==2.6.0
 pyparsing==2.4.7
 pyTelegramBotAPI==3.7.1
