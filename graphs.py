@@ -4,23 +4,18 @@ from matplotlib.ticker import MaxNLocator
 
 from dados_covid import read_data_from_ms, update_graphs_in_json
 
-from sys import argv
-
 
 class Grafico:
     def __init__(self, figsize=(14, 10)):
-        self.__df = read_data_from_ms()
+        self.__df = read_data_from_ms(False)
         self.__filename = 'default'
         self.__fig = plt.figure(figsize=figsize)
         self.__ax = plt.subplot()
-        self.funcoes = {
-            'casos_acumulados': self.casos_acumulados,
-            'casos_novos': self.casos_novos,
-            'mortes_acumuladas': self.mortes_acumuladas,
-            'mortes_novas': self.mortes_novas,
-            'casos_full': self.casos_full,
-            'mortes_full': self.mortes_full
-        }
+        self.__metadata = dict()
+
+    @property
+    def metadata(self):
+        return self.__metadata
 
     @property
     def filename(self):
@@ -120,28 +115,13 @@ class Grafico:
     def save_as_png(self):
         plt.savefig(f'images/{self.__filename}.png')
         print(f'Arquivo <{self.__filename}> salvo.')
-        self.__filename = 'default'
+        self.__metadata[self.__filename] = {'id': None, 'caption': self.caption}
         plt.cla()
 
 
 if __name__ == '__main__':
-    graphs_metadata = {}
     graficos = Grafico()
-    if len(argv) > 1:
-        for k, function in graficos.funcoes.items():
-            if k in argv:
-                arquivo = function()
-                filename = arquivo.filename
-                caption = arquivo.caption
-                arquivo.save_as_png()
-                graphs_metadata[filename] = {'id': None, 'caption': caption}
-    else:
-        keys = 'casos_full', 'mortes_full'
-        for function in keys:
-            arquivo = graficos.funcoes[function]()
-            filename = arquivo.filename
-            caption = arquivo.caption
-            arquivo.save_as_png()
-            graphs_metadata[filename] = {'id': None, 'caption': caption}
+    graficos.casos_full().save_as_png()
+    graficos.mortes_full().save_as_png()
 
-    update_graphs_in_json(graphs_metadata)
+    update_graphs_in_json(graficos.metadata)

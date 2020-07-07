@@ -109,12 +109,13 @@ def get_file_url():
     dados = r.json()['results'][0]
     arquivo_url = dados['arquivo']['url']
 
-    print('URL encontrada, baixando arquivo...')
+    print('URL encontrada.')
     return arquivo_url
 
 
 # baixa a planilha do Ministério da Saúde
 def download_file():
+    print('Baixando arquivo...')
     arquivo_url = get_file_url()
     arquivo = requests.get(arquivo_url)
     with open('HIST_PAINEL_COVIDBR.xlsx', 'wb') as f:
@@ -123,13 +124,15 @@ def download_file():
 
 
 # lê os dados na planilha do Ministério da Saúde
-def read_data_from_ms():
-    download_file()
+def read_data_from_ms(download=True):
+    if download:
+        download_file()
+    print('Lendo arquivo...')
     df = pd.read_excel('HIST_PAINEL_COVIDBR.xlsx')
     df = df[['data', 'regiao', 'casosAcumulado',
              'casosNovos', 'obitosAcumulado', 'obitosNovos']]
     brasil_df = df[df['regiao'] == 'Brasil'].set_index('data')
-    print('Dados lidos com sucesso!')
+    print(f'Dados lidos com sucesso!')
     return brasil_df
 
 
