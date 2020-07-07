@@ -7,7 +7,7 @@ from dados_covid import read_data_from_ms, update_graphs_in_json
 
 class Grafico:
     def __init__(self, figsize=(14, 10)):
-        self.__df = read_data_from_ms(False)
+        self.__df = read_data_from_ms(download=True)
         self.__filename = 'default'
         self.__fig = plt.figure(figsize=figsize)
         self.__ax = plt.subplot()

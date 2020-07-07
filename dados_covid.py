@@ -115,8 +115,8 @@ def get_file_url():
 
 # baixa a planilha do Ministério da Saúde
 def download_file():
-    print('Baixando arquivo...')
     arquivo_url = get_file_url()
+    print('Baixando arquivo...')
     arquivo = requests.get(arquivo_url)
     with open('HIST_PAINEL_COVIDBR.xlsx', 'wb') as f:
         f.write(arquivo.content)
