@@ -3,6 +3,8 @@ import requests
 import pandas as pd
 from datetime import date, datetime, timedelta
 import flag
+import zipfile
+import os
 
 
 def time_format(data):
@@ -118,17 +120,29 @@ def download_file():
     arquivo_url = get_file_url()
     print('Baixando arquivo...')
     arquivo = requests.get(arquivo_url)
-    with open('HIST_PAINEL_COVIDBR.xlsx', 'wb') as f:
+    with open('data/HIST_PAINEL_COVIDBR.zip', 'wb') as f:
         f.write(arquivo.content)
     print('Arquivo baixado.')
+
+
+def unpack_zip_file(filename):
+    print('Descompactando arquivo...')
+    with zipfile.ZipFile(f'data/{filename}') as arquivo_zip:
+        arquivo_zip.extractall('data/')
+    for file in os.listdir('data/'):
+        if file[-3:] != 'zip':
+            print('Arquivo descompactado.')
+            return file
+    
 
 
 # lê os dados na planilha do Ministério da Saúde
 def read_data_from_ms(download=True):
     if download:
         download_file()
+    filename = unpack_zip_file('HIST_PAINEL_COVIDBR.zip')
     print('Lendo arquivo...')
-    df = pd.read_excel('HIST_PAINEL_COVIDBR.xlsx')
+    df = pd.read_csv(f'data/{filename}/{filename}.csv', sep=';')
     df = df[['data', 'regiao', 'casosAcumulado',
              'casosNovos', 'obitosAcumulado', 'obitosNovos']]
     brasil_df = df[df['regiao'] == 'Brasil'].set_index('data')
@@ -163,4 +177,4 @@ def get_ranking_from_json(top=10):
 
 
 if __name__ == '__main__':
-    pass
+    read_data_from_ms(download=False)
