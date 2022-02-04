@@ -25,7 +25,9 @@ def create_json_ranking():
         'Saudi Arabia': 'Arábia Saudita',
         'South Africa': 'África do Sul',
         'Bangladesh': 'Bangladesh',
-        'Colombia': 'Colômbia'
+        'Colombia': 'Colômbia',
+        'Argentina': 'Argentina',
+        'Iraq': 'Iraque',
     }
 
     r = requests.get('https://api.covid19api.com/summary')

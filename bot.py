@@ -154,6 +154,7 @@ def send_graphs(msg):
                                   caption=metadata['caption'])
             graphs_metadata[filename]['id'] = foto.photo[0].file_id
             dados_covid.update_graphs_in_json(graphs_metadata)
+            photo.close()
         else:
             photo = metadata['id']
             foto = bot.send_photo(chat_id=msg.chat.id,
